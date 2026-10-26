@@ -1705,17 +1705,16 @@ table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: ce
       display: none;
     }
 
-    /* Stepper */
+    /* Stepper genérico (PEDro e Cochrane) */
     .stepper-nav {
       display: flex;
+      flex-wrap: wrap;
       gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 8px;
+      padding-bottom: 4px;
       margin-bottom: 16px;
     }
     .step-pill {
-      flex: 1;
-      min-width: 120px;
+      flex: 1 1 120px;
       text-align: center;
       padding: 8px 10px;
       background: #f1f5f7;
@@ -1736,6 +1735,383 @@ table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: ce
       background: #e6f4f2;
       color: var(--accent);
       border-color: #a3d9d3;
+    }
+
+    /* STEPPER PUBMED RECONSTRUÍDO (DESKTOP & RESPONSIVO) */
+    .pubmed-stepper-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(16, 36, 43, 0.05);
+      position: relative;
+    }
+
+    /* MODO DESKTOP (>= 721px): Trilha horizontal com quebra automática, sem rolagem */
+    .pubmed-desktop-track {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px 6px;
+      padding: 16px 20px;
+      background: #f8fafb;
+      border-bottom: 1px solid var(--border);
+    }
+    .pubmed-track-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      min-height: 40px;
+      box-sizing: border-box;
+    }
+    .pubmed-track-step:hover {
+      background: #f0f7f5;
+      color: var(--text);
+      border-color: #9ec2b8;
+    }
+    .pubmed-track-step:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .pubmed-track-step.is-current {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      box-shadow: 0 3px 10px rgba(15, 118, 110, 0.28);
+      font-weight: 700;
+      transform: translateY(-1px);
+    }
+    .pubmed-track-step.is-done {
+      background: #e6f4f2;
+      color: var(--accent);
+      border-color: #a3d9d3;
+    }
+    .pubmed-track-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.74rem;
+      font-weight: 700;
+      background: #e2e8f0;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .pubmed-track-step.is-current .pubmed-track-circle {
+      background: rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+    }
+    .pubmed-track-step.is-done .pubmed-track-circle {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .pubmed-track-connector {
+      flex: 1 1 8px;
+      height: 2px;
+      min-width: 8px;
+      background: #dce5e8;
+      border-radius: 2px;
+      transition: background 0.25s ease;
+    }
+    .pubmed-track-connector.is-done {
+      background: var(--accent);
+    }
+
+    /* MODO CELULAR (<= 720px): Cabeçalho informativo, barra segmentada e índice */
+    .pubmed-mobile-header {
+      display: none;
+      padding: 16px 16px 12px 16px;
+      background: #f8fafb;
+      border-bottom: 1px solid var(--border);
+    }
+    .pubmed-mobile-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .pubmed-mobile-step-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+    .pubmed-mobile-step-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #e6f4f2;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 700;
+      border: 1px solid #b8d5cd;
+    }
+    .pubmed-mobile-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+      margin: 2px 0 0 0;
+    }
+
+    /* Barra de progresso segmentada de 6 partes */
+    .pubmed-segmented-bar {
+      display: flex;
+      gap: 5px;
+      margin-top: 12px;
+    }
+    .pubmed-segment {
+      flex: 1;
+      height: 5px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      transition: background-color 0.25s ease;
+    }
+    .pubmed-segment.is-done {
+      background: var(--accent);
+    }
+    .pubmed-segment.is-current {
+      background: #e8a33d;
+    }
+
+    /* Botão e lista vertical do Índice de Etapas Expansível */
+    .pubmed-index-toggle {
+      width: 100%;
+      min-height: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 14px;
+      margin-top: 12px;
+      background: #ffffff;
+      border: 1px solid #c7dcd6;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      box-sizing: border-box;
+      transition: background 0.18s ease, border-color 0.18s ease;
+    }
+    .pubmed-index-toggle:hover {
+      background: #f0f7f5;
+      border-color: #9ec2b8;
+    }
+    .pubmed-index-toggle:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .pubmed-index-chevron {
+      color: var(--accent);
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .pubmed-index-toggle[aria-expanded="true"] .pubmed-index-chevron {
+      transform: rotate(180deg);
+    }
+    .pubmed-index-list {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 8px;
+      background: #edf5f3;
+      border: 1px solid #c7dcd6;
+      border-radius: 12px;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .pubmed-index-list.is-open {
+      display: flex;
+    }
+    .pubmed-index-item {
+      min-height: 48px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      line-height: 1.35;
+      box-sizing: border-box;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .pubmed-index-item:hover {
+      background: #f8fafb;
+      border-color: #9ec2b8;
+    }
+    .pubmed-index-item:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+    .pubmed-index-item.is-current {
+      background: #e6f4f2;
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .pubmed-index-item.is-done {
+      border-color: #a3d9d3;
+    }
+    .pubmed-index-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      font-weight: 700;
+      background: #e2e8f0;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .pubmed-index-item.is-current .pubmed-index-circle {
+      background: #e8a33d;
+      color: #10242b;
+    }
+    .pubmed-index-item.is-done .pubmed-index-circle {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .pubmed-index-text {
+      flex: 1 1 auto;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Corpo de conteúdo do passo */
+    .pubmed-step-body {
+      padding: 24px;
+      min-height: 125px;
+      background: #ffffff;
+      touch-action: pan-y; /* Permite scroll vertical livre enquanto detecta gesto horizontal */
+    }
+
+    /* Rodapé com navegação fixa em grade de 2 colunas */
+    .pubmed-card-footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 14px 18px;
+      background: #fbfdfc;
+      border-top: 1px solid var(--border);
+      box-sizing: border-box;
+    }
+    .pubmed-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 48px;
+      min-height: 48px;
+      padding: 0 16px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      white-space: nowrap;
+      box-sizing: border-box;
+      transition: background 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease, opacity 0.16s ease;
+    }
+    .pubmed-nav-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+    .pubmed-nav-btn:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .pubmed-btn-prev {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .pubmed-btn-prev:hover:not(:disabled) {
+      background: #f1f6f5;
+      border-color: #9ec2b8;
+    }
+    .pubmed-btn-prev:disabled,
+    .pubmed-btn-prev[aria-disabled="true"] {
+      opacity: 0.45;
+      cursor: not-allowed;
+      border-color: #e2e8f0;
+      background: #f8fafb;
+    }
+    .pubmed-btn-next {
+      background: var(--accent);
+      border: 1px solid #0d645d;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(15, 118, 110, 0.2);
+    }
+    .pubmed-btn-next:hover {
+      background: #0d6b63;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.28);
+    }
+    .pubmed-btn-next.is-complete {
+      background: #e8a33d;
+      border-color: #c98525;
+      color: #10242b;
+      box-shadow: 0 2px 6px rgba(232, 163, 61, 0.25);
+    }
+    .pubmed-btn-next.is-complete:hover {
+      background: #e09930;
+      box-shadow: 0 4px 12px rgba(232, 163, 61, 0.35);
+    }
+
+    @media (max-width: 720px) {
+      .pubmed-desktop-track {
+        display: none !important;
+      }
+      .pubmed-mobile-header {
+        display: block !important;
+      }
+      .pubmed-step-body {
+        padding: 18px 16px;
+      }
+      .pubmed-card-footer {
+        padding: 12px 14px;
+        gap: 8px;
+      }
+    }
+    @media (min-width: 721px) {
+      .pubmed-mobile-header {
+        display: none !important;
+      }
+      .pubmed-desktop-track {
+        display: flex !important;
+      }
     }
 
     /* Video lazy loader */
@@ -2391,27 +2767,67 @@ table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: ce
         </header>
       </div>
 
-      <!-- STEPPER PUBMED -->
+      <!-- STEPPER PUBMED RECONSTRUÍDO (DESKTOP TRILHA FLEX-WRAP / CELULAR CABEÇALHO + SEGMENTOS + ÍNDICE) -->
       <h3 class="text-lg font-bold mb-3">Passo a Passo da Busca no PubMed</h3>
-      <div class="card mb-6">
-        <div class="stepper-nav" id="stepperNavPubmed">
-          <div class="step-pill is-active" data-step="0">1. PICO & Conceitos</div>
-          <div class="step-pill" data-step="1">2. MeSH & Livres</div>
-          <div class="step-pill" data-step="2">3. OR & AND</div>
-          <div class="step-pill" data-step="3">4. Truncamento</div>
-          <div class="step-pill" data-step="4">5. Filtros</div>
-          <div class="step-pill" data-step="5">6. Revisão</div>
+      <div class="pubmed-stepper-card mb-6" id="pubmedStepperCard">
+        
+        <!-- CABEÇALHO EXCLUSIVO CELULAR (<= 720px) -->
+        <div class="pubmed-mobile-header" id="pubmedMobileHeader">
+          <div class="pubmed-mobile-header-top">
+            <span class="pubmed-mobile-step-tag" id="pubmedMobileTag">Etapa 1 de 6</span>
+            <span class="pubmed-mobile-step-badge" id="pubmedMobileBadge">1/6</span>
+          </div>
+          <h4 class="pubmed-mobile-title" id="pubmedMobileTitle" aria-live="polite">
+            Traduza a pergunta em conceitos (PICO)
+          </h4>
+
+          <!-- Barra de progresso segmentada de 6 partes -->
+          <div class="pubmed-segmented-bar" id="pubmedSegmentedBar" role="progressbar" aria-valuemin="1" aria-valuemax="6" aria-valuenow="1" aria-label="Progresso das etapas do PubMed">
+            <div class="pubmed-segment is-current" data-seg="0"></div>
+            <div class="pubmed-segment" data-seg="1"></div>
+            <div class="pubmed-segment" data-seg="2"></div>
+            <div class="pubmed-segment" data-seg="3"></div>
+            <div class="pubmed-segment" data-seg="4"></div>
+            <div class="pubmed-segment" data-seg="5"></div>
+          </div>
+
+          <!-- Botão para abrir o Índice de Etapas Expansível -->
+          <button type="button" class="pubmed-index-toggle" id="pubmedIndexToggle" aria-expanded="false" aria-controls="pubmedIndexList">
+            <span class="row gap-2" style="align-items: center;">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h7"></path></svg>
+              <span>Ver todas as 6 etapas</span>
+            </span>
+            <svg class="pubmed-index-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+
+          <!-- Lista vertical expansível com as 6 etapas completas -->
+          <div class="pubmed-index-list" id="pubmedIndexList" role="region" aria-label="Índice de todas as etapas do PubMed">
+            <!-- Injetado dinamicamente via JS -->
+          </div>
         </div>
 
-        <div class="panel p-4" id="stepperContentPubmed" style="min-height: 120px;">
-          <!-- Injetado por JS -->
+        <!-- TRILHA DESKTOP (>= 721px): Trilha horizontal com quebra automática, sem corte e sem scroll -->
+        <nav class="pubmed-desktop-track" id="pubmedDesktopTrack" aria-label="Trilha de etapas da PubMed">
+          <!-- Injetado dinamicamente via JS -->
+        </nav>
+
+        <!-- CORPO DA ETAPA COM SUPORTE A GESTO SWIPE -->
+        <div class="pubmed-step-body" id="stepperContentPubmed">
+          <!-- Injetado dinamicamente via JS -->
         </div>
 
-        <div class="row between p-3" style="border-top: 1px solid var(--border);">
-          <button class="btn" data-variant="secondary" data-size="sm" id="btnPrevPubmed" disabled>← Etapa Anterior</button>
-          <span class="text-xs muted" id="stepIndicatorPubmed">Etapa 1 de 6</span>
-          <button class="btn" data-variant="primary" data-size="sm" id="btnNextPubmed">Próxima Etapa →</button>
+        <!-- RODAPÉ FIXO EM GRADE DE 2 COLUNAS DE 48PX -->
+        <div class="pubmed-card-footer">
+          <button type="button" class="pubmed-nav-btn pubmed-btn-prev" id="btnPrevPubmed" disabled aria-disabled="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M15 19l-7-7 7-7"></path></svg>
+            <span>Anterior</span>
+          </button>
+          <button type="button" class="pubmed-nav-btn pubmed-btn-next" id="btnNextPubmed">
+            <span id="btnNextPubmedLabel">Próxima</span>
+            <svg id="btnNextPubmedIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+          </button>
         </div>
+
       </div>
 
       <!-- QUADRO DE SINTAXE PUBMED COM TOOLTIPS -->
@@ -2889,6 +3305,7 @@ table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: ce
                 <p class="m-0">PHYSIOTHERAPY EVIDENCE DATABASE. <strong>PEDro</strong>. Sydney: Institute for Musculoskeletal Health. Disponível em: &lt;https://pedro.org.au&gt;. Acesso em: 26 out. 2026.</p>
                 <p class="m-0">PHYSIOTHERAPY EVIDENCE DATABASE. <strong>You Ask #PEDroAnswers Vídeo 01, 02 e 03</strong>. [S. l.]: YouTube, [s. d.]. 3 vídeos. Disponíveis em: &lt;https://www.youtube.com/watch?v=h0461BVQ7VE&gt;, &lt;https://www.youtube.com/watch?v=l0bnTsp98u0&gt;, &lt;https://www.youtube.com/watch?v=oyK1UmOPjYg&gt;. Acesso em: 26 out. 2026.</p>
                 <p class="m-0">PRÁTICA BASEADA EM EVIDÊNCIAS. <strong>Como e onde realizar buscas por revisões sistemáticas?</strong> [S. l.]: YouTube, [s. d.]. 1 vídeo. Disponível em: &lt;https://www.youtube.com/watch?v=4NWDYYkgy3Q&gt;. Acesso em: 26 out. 2026.</p>
+                <p class="m-0">SILVA, Andréa Soares Rocha da. <strong>Guia interativo de busca em bases de dados</strong>. 2026. Infográfico interativo (recurso educacional digital). Disponível em: &lt;https://andreagets.github.io/Guia-interativo-Busca-Bases-de-Dados/&gt;. Acesso em: 26 out. 2026.</p>
               </div>
             </div>
           </div>
@@ -2922,13 +3339,13 @@ table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: ce
             <h3 class="text-base font-bold m-0" style="color: var(--accent); text-align: left;">Como citar este recurso</h3>
             <button type="button" class="btn" data-variant="primary" data-size="sm" id="btnCopyCitation">
               <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-              Copiar citação
+              <span>Copiar citação</span>
             </button>
           </header>
           <section style="text-align: left;">
-            <div class="citation-box" id="citationContentText" tabindex="0" style="text-align: left;">SOARES, Andréa. Guia interativo de busca em bases de dados. 2026. Infográfico interativo (recurso educacional digital). Disponível em: [endereço da página publicada]. Acesso em: 26 out. 2026.</div>
+            <div class="citation-box" id="citationContentText" tabindex="0" style="text-align: left;">SILVA, Andréa Soares Rocha da. Guia interativo de busca em bases de dados. 2026. Infográfico interativo (recurso educacional digital). Disponível em: <a href="https://andreagets.github.io/Guia-interativo-Busca-Bases-de-Dados/" target="_blank" rel="noopener noreferrer" style="color: var(--accent); word-break: break-all; text-decoration: underline;">https://andreagets.github.io/Guia-interativo-Busca-Bases-de-Dados/</a>. Acesso em: 26 out. 2026.</div>
             <p class="text-xs muted m-0 mt-2" style="text-align: left;">
-              Substitua o endereço entre colchetes pelo link da página publicada. Citação no corpo do texto, conforme NBR 10520:2023: (Soares, 2026).
+              Citação no corpo do texto, conforme NBR 10520:2023: (Silva, 2026).
             </p>
           </section>
         </div>
@@ -2943,14 +3360,19 @@ table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: ce
     ========================================================= */
     const userProgress = {
       visitedTabs: new Set([1]),
-      completedQuiz: false
+      completedQuiz: false,
+      pubmedStepsVisited: new Set([0])
     };
 
     function updateProgressBar() {
-      // 4 abas (20% cada = 80%) + quiz concluído (20%)
+      // 4 abas (15% cada = 60%) + PubMed 6 etapas completas (20%) + Quiz (20%) = 100%
       const tabCount = userProgress.visitedTabs.size;
+      const tabScore = tabCount * 15;
+      const pubmedRatio = (userProgress.pubmedStepsVisited.size / 6);
+      const pubmedScore = Math.round(pubmedRatio * 20);
       const quizBonus = userProgress.completedQuiz ? 20 : 0;
-      let totalPct = (tabCount * 20) + quizBonus;
+      
+      let totalPct = tabScore + pubmedScore + quizBonus;
       if (totalPct > 100) totalPct = 100;
       
       const bar = document.getElementById('globalProgressBar');
@@ -3479,7 +3901,362 @@ table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: ce
       renderStep();
     }
 
-    createStepper('stepperNavPubmed', 'stepperContentPubmed', 'stepIndicatorPubmed', 'btnPrevPubmed', 'btnNextPubmed', pubmedSteps);
+    /* =========================================================
+       CONTROLADOR DEDICADO DO STEPPER PUBMED
+       - Desktop: Trilha com flex-wrap sem rolagem lateral
+       - Celular: Cabeçalho com aria-live, barra segmentada, índice expansível
+       - Rodapé: Botões de 48px com estados e rótulos dinâmicos
+       - Suporte a swipe horizontal de 60px sem travar scroll vertical
+       - Rolagem suave até o topo do card ao mudar de etapa
+    ========================================================= */
+    const pubmedShortLabels = [
+      '1. PICO & Conceitos',
+      '2. MeSH & Livres',
+      '3. OR & AND',
+      '4. Truncamento',
+      '5. Filtros',
+      '6. Revisão'
+    ];
+
+    let currentPubmedStep = 0;
+    const pubmedStepperCard = document.getElementById('pubmedStepperCard');
+    const pubmedDesktopTrack = document.getElementById('pubmedDesktopTrack');
+    const pubmedMobileHeader = document.getElementById('pubmedMobileHeader');
+    const pubmedMobileTag = document.getElementById('pubmedMobileTag');
+    const pubmedMobileBadge = document.getElementById('pubmedMobileBadge');
+    const pubmedMobileTitle = document.getElementById('pubmedMobileTitle');
+    const pubmedSegmentedBar = document.getElementById('pubmedSegmentedBar');
+    const pubmedIndexToggle = document.getElementById('pubmedIndexToggle');
+    const pubmedIndexList = document.getElementById('pubmedIndexList');
+    const stepperContentPubmed = document.getElementById('stepperContentPubmed');
+    const btnPrevPubmed = document.getElementById('btnPrevPubmed');
+    const btnNextPubmed = document.getElementById('btnNextPubmed');
+    const btnNextPubmedLabel = document.getElementById('btnNextPubmedLabel');
+    const btnNextPubmedIcon = document.getElementById('btnNextPubmedIcon');
+
+    function initPubmedStepper() {
+      if (!pubmedStepperCard) return;
+
+      // Monta os elementos estáticos do Desktop Track
+      renderPubmedDesktopTrackSkeleton();
+
+      // Monta os elementos da lista do índice expansível mobile
+      renderPubmedIndexListSkeleton();
+
+      // Atualiza a visualização para o passo inicial
+      updatePubmedStepView(0, false);
+
+      // Eventos dos botões de rodapé
+      btnPrevPubmed?.addEventListener('click', () => {
+        if (currentPubmedStep > 0) {
+          goToPubmedStep(currentPubmedStep - 1);
+        }
+      });
+
+      btnNextPubmed?.addEventListener('click', () => {
+        if (currentPubmedStep < pubmedSteps.length - 1) {
+          goToPubmedStep(currentPubmedStep + 1);
+        } else {
+          // Última etapa (Concluir)
+          for (let i = 0; i < pubmedSteps.length; i++) {
+            userProgress.pubmedStepsVisited.add(i);
+          }
+          updateProgressBar();
+          updatePubmedStepView(currentPubmedStep, false);
+          if (window.skipUI?.toast) {
+            window.skipUI.toast('Etapas do PubMed concluídas! Pratique no laboratório.', { type: 'success' });
+          }
+        }
+      });
+
+      // Alternância do Índice de Etapas Expansível
+      pubmedIndexToggle?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        togglePubmedIndex();
+      });
+
+      // Fechar índice com tecla Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && pubmedIndexList?.classList.contains('is-open')) {
+          closePubmedIndex(true);
+        }
+      });
+
+      // Fechar índice ao clicar fora
+      document.addEventListener('click', (e) => {
+        if (pubmedIndexList?.classList.contains('is-open')) {
+          if (!pubmedIndexList.contains(e.target) && !pubmedIndexToggle?.contains(e.target)) {
+            closePubmedIndex(false);
+          }
+        }
+      });
+
+      // Suporte a gesto de swipe horizontal no corpo do cartão
+      initPubmedSwipeSupport();
+    }
+
+    function renderPubmedDesktopTrackSkeleton() {
+      if (!pubmedDesktopTrack) return;
+      pubmedDesktopTrack.innerHTML = '';
+
+      pubmedSteps.forEach((step, idx) => {
+        const stepBtn = document.createElement('button');
+        stepBtn.type = 'button';
+        stepBtn.className = 'pubmed-track-step';
+        stepBtn.id = 'pubmedTrackStep-' + idx;
+        stepBtn.setAttribute('data-step-idx', String(idx));
+        stepBtn.setAttribute('aria-label', `Etapa ${idx + 1}: ${pubmedShortLabels[idx]}`);
+
+        stepBtn.innerHTML = `
+          <span class="pubmed-track-circle" id="pubmedTrackCircle-${idx}">${idx + 1}</span>
+          <span>${pubmedShortLabels[idx]}</span>
+        `;
+
+        stepBtn.addEventListener('click', () => {
+          goToPubmedStep(idx);
+        });
+
+        pubmedDesktopTrack.appendChild(stepBtn);
+
+        // Conector entre etapas (exceto após a última)
+        if (idx < pubmedSteps.length - 1) {
+          const connector = document.createElement('div');
+          connector.className = 'pubmed-track-connector';
+          connector.id = 'pubmedConnector-' + idx;
+          pubmedDesktopTrack.appendChild(connector);
+        }
+      });
+    }
+
+    function renderPubmedIndexListSkeleton() {
+      if (!pubmedIndexList) return;
+      pubmedIndexList.innerHTML = '';
+
+      pubmedSteps.forEach((step, idx) => {
+        const itemBtn = document.createElement('button');
+        itemBtn.type = 'button';
+        itemBtn.className = 'pubmed-index-item';
+        itemBtn.id = 'pubmedIndexItem-' + idx;
+        itemBtn.setAttribute('data-step-idx', String(idx));
+
+        itemBtn.innerHTML = `
+          <span class="pubmed-index-circle" id="pubmedIndexCircle-${idx}">${idx + 1}</span>
+          <span class="pubmed-index-text">${step.title}</span>
+        `;
+
+        itemBtn.addEventListener('click', () => {
+          closePubmedIndex(false);
+          goToPubmedStep(idx);
+        });
+
+        pubmedIndexList.appendChild(itemBtn);
+      });
+    }
+
+    function togglePubmedIndex() {
+      const isOpen = pubmedIndexToggle?.getAttribute('aria-expanded') === 'true';
+      if (isOpen) {
+        closePubmedIndex(false);
+      } else {
+        openPubmedIndex();
+      }
+    }
+
+    function openPubmedIndex() {
+      if (!pubmedIndexToggle || !pubmedIndexList) return;
+      pubmedIndexToggle.setAttribute('aria-expanded', 'true');
+      pubmedIndexList.classList.add('is-open');
+
+      // Foca no item atualmente ativo
+      const curItem = document.getElementById('pubmedIndexItem-' + currentPubmedStep);
+      if (curItem) {
+        setTimeout(() => curItem.focus(), 50);
+      }
+    }
+
+    function closePubmedIndex(returnFocus = true) {
+      if (!pubmedIndexToggle || !pubmedIndexList) return;
+      pubmedIndexToggle.setAttribute('aria-expanded', 'false');
+      pubmedIndexList.classList.remove('is-open');
+      if (returnFocus) {
+        pubmedIndexToggle.focus();
+      }
+    }
+
+    function goToPubmedStep(targetIdx) {
+      targetIdx = Math.max(0, Math.min(pubmedSteps.length - 1, targetIdx));
+      currentPubmedStep = targetIdx;
+
+      // Registra progresso
+      userProgress.pubmedStepsVisited.add(targetIdx);
+      updateProgressBar();
+
+      updatePubmedStepView(targetIdx, true);
+    }
+
+    function updatePubmedStepView(idx, shouldScroll = false) {
+      const step = pubmedSteps[idx];
+      if (!step) return;
+
+      // 1. Atualiza cabeçalho mobile (<= 720px)
+      if (pubmedMobileTag) pubmedMobileTag.textContent = `Etapa ${idx + 1} de ${pubmedSteps.length}`;
+      if (pubmedMobileBadge) pubmedMobileBadge.textContent = `${idx + 1}/${pubmedSteps.length}`;
+      if (pubmedMobileTitle) {
+        pubmedMobileTitle.textContent = step.title;
+      }
+      if (pubmedSegmentedBar) {
+        pubmedSegmentedBar.setAttribute('aria-valuenow', String(idx + 1));
+      }
+
+      // 2. Atualiza os 6 segmentos da barra de progresso
+      const segments = pubmedSegmentedBar ? pubmedSegmentedBar.querySelectorAll('.pubmed-segment') : [];
+      segments.forEach((seg, sIdx) => {
+        seg.className = 'pubmed-segment';
+        if (sIdx < idx) {
+          seg.classList.add('is-done');
+        } else if (sIdx === idx) {
+          seg.classList.add('is-current');
+        }
+      });
+
+      // 3. Atualiza os itens da lista do índice expansível
+      for (let i = 0; i < pubmedSteps.length; i++) {
+        const itemEl = document.getElementById('pubmedIndexItem-' + i);
+        const circleEl = document.getElementById('pubmedIndexCircle-' + i);
+        if (!itemEl || !circleEl) continue;
+
+        itemEl.className = 'pubmed-index-item';
+        if (i === idx) {
+          itemEl.classList.add('is-current');
+          circleEl.textContent = String(i + 1);
+        } else if (i < idx || userProgress.pubmedStepsVisited.has(i)) {
+          itemEl.classList.add('is-done');
+          circleEl.textContent = '✓';
+        } else {
+          circleEl.textContent = String(i + 1);
+        }
+      }
+
+      // 4. Atualiza trilha desktop (>= 721px)
+      for (let i = 0; i < pubmedSteps.length; i++) {
+        const stepBtn = document.getElementById('pubmedTrackStep-' + i);
+        const circle = document.getElementById('pubmedTrackCircle-' + i);
+        if (!stepBtn || !circle) continue;
+
+        stepBtn.className = 'pubmed-track-step';
+        if (i === idx) {
+          stepBtn.classList.add('is-current');
+          stepBtn.setAttribute('aria-current', 'step');
+          circle.textContent = String(i + 1);
+        } else if (i < idx || userProgress.pubmedStepsVisited.has(i)) {
+          stepBtn.classList.add('is-done');
+          stepBtn.removeAttribute('aria-current');
+          circle.textContent = '✓';
+        } else {
+          stepBtn.removeAttribute('aria-current');
+          circle.textContent = String(i + 1);
+        }
+
+        // Conector
+        if (i < pubmedSteps.length - 1) {
+          const conn = document.getElementById('pubmedConnector-' + i);
+          if (conn) {
+            if (i < idx) {
+              conn.classList.add('is-done');
+            } else {
+              conn.classList.remove('is-done');
+            }
+          }
+        }
+      }
+
+      // 5. Injeta o conteúdo do passo no corpo
+      if (stepperContentPubmed) {
+        stepperContentPubmed.innerHTML = `
+          <h4 class="text-base font-bold m-0" style="color: var(--accent); line-height: 1.35;">${step.title}</h4>
+          <p class="text-sm mt-2 mb-0" style="line-height: 1.65; color: var(--text);">${step.text}</p>
+        `;
+      }
+
+      // 6. Atualiza botões do rodapé da seção
+      if (btnPrevPubmed) {
+        const isFirst = (idx === 0);
+        btnPrevPubmed.disabled = isFirst;
+        btnPrevPubmed.setAttribute('aria-disabled', isFirst ? 'true' : 'false');
+      }
+
+      if (btnNextPubmed && btnNextPubmedLabel && btnNextPubmedIcon) {
+        const isLast = (idx === pubmedSteps.length - 1);
+        if (isLast) {
+          btnNextPubmed.className = 'pubmed-nav-btn pubmed-btn-next is-complete';
+          btnNextPubmedLabel.textContent = 'Concluir';
+          btnNextPubmedIcon.innerHTML = '<path d="M5 13l4 4L19 7"></path>';
+          btnNextPubmed.setAttribute('aria-label', 'Concluir todas as etapas do PubMed');
+        } else {
+          btnNextPubmed.className = 'pubmed-nav-btn pubmed-btn-next';
+          btnNextPubmedLabel.textContent = 'Próxima';
+          btnNextPubmedIcon.innerHTML = '<path d="M9 5l7 7-7 7"></path>';
+          btnNextPubmed.setAttribute('aria-label', 'Ir para a próxima etapa');
+        }
+      }
+
+      // 7. Rolagem suave ao topo do card (respeitando acessibilidade)
+      if (shouldScroll && pubmedStepperCard) {
+        const rect = pubmedStepperCard.getBoundingClientRect();
+        const navHeight = 64;
+        // Rola apenas se o topo do cartão estiver fora da zona de conforto visual
+        if (rect.top < navHeight || rect.top > window.innerHeight * 0.6) {
+          const targetY = window.scrollY + rect.top - (navHeight + 12);
+          const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          window.scrollTo({
+            top: Math.max(0, targetY),
+            behavior: prefersReduced ? 'auto' : 'smooth'
+          });
+        }
+      }
+    }
+
+    // Gesto de Swipe no corpo do cartão PubMed
+    function initPubmedSwipeSupport() {
+      if (!stepperContentPubmed) return;
+
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchStartTime = 0;
+
+      stepperContentPubmed.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+          touchStartTime = Date.now();
+        }
+      }, { passive: true });
+
+      stepperContentPubmed.addEventListener('touchend', (e) => {
+        if (e.changedTouches.length === 1) {
+          const deltaX = e.changedTouches[0].clientX - touchStartX;
+          const deltaY = e.changedTouches[0].clientY - touchStartY;
+          const elapsedTime = Date.now() - touchStartTime;
+
+          // Limiar de 60px horizontal, movimento predominantemente horizontal e em menos de 600ms
+          if (Math.abs(deltaX) >= 60 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5 && elapsedTime < 600) {
+            if (deltaX < 0) {
+              // Deslizar para a esquerda: avança
+              if (currentPubmedStep < pubmedSteps.length - 1) {
+                goToPubmedStep(currentPubmedStep + 1);
+              }
+            } else {
+              // Deslizar para a direita: volta
+              if (currentPubmedStep > 0) {
+                goToPubmedStep(currentPubmedStep - 1);
+              }
+            }
+          }
+        }
+      }, { passive: true });
+    }
+
+    initPubmedStepper();
     createStepper('stepperNavPedro', 'stepperContentPedro', 'stepIndicatorPedro', 'btnPrevPedro', 'btnNextPedro', pedroSteps);
     createStepper('stepperNavCochrane', 'stepperContentCochrane', 'stepIndicatorCochrane', 'btnPrevCochrane', 'btnNextCochrane', cochraneSteps);
 
@@ -3871,8 +4648,13 @@ table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: ce
     });
 
     btnCopyCitation?.addEventListener('click', () => {
-      const text = citationContentText?.textContent || '';
-      navigator.clipboard?.writeText(text).then(() => {
+      const citationText = 'SILVA, Andréa Soares Rocha da. Guia interativo de busca em bases de dados. 2026. Infográfico interativo (recurso educacional digital). Disponível em: https://andreagets.github.io/Guia-interativo-Busca-Bases-de-Dados/. Acesso em: 26 out. 2026.';
+      navigator.clipboard?.writeText(citationText).then(() => {
+        const originalHtml = btnCopyCitation.innerHTML;
+        btnCopyCitation.innerHTML = '<span>Copiado!</span>';
+        setTimeout(() => {
+          btnCopyCitation.innerHTML = originalHtml;
+        }, 2000);
         if (window.skipUI?.toast) {
           window.skipUI.toast('Citação copiada com sucesso!', { type: 'success' });
         }

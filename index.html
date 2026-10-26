@@ -1,0 +1,4195 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pesquisa em Fisioterapia I — Guia interativo de busca em bases de dados</title>
+  <style>
+/* Skip artifact shell — fixed styles served beside every artifact.
+   Tokens, utilities and components (basecoat 1.0 markup, no CDN); artifacts
+   override --accent for their own identity. */
+:root {
+  color-scheme: light dark;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --accent-text: color-mix(in srgb, var(--accent) 72%, #000);
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --text: #14171f;
+  --text-muted: #5b6472;
+  --border: rgba(20, 23, 31, 0.10);
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(20, 23, 31, 0.08);
+  --space: 16px;
+  --success: #0a7a35;
+  --danger: #c0262d;
+  --warning: #8a5300;
+}
+/* Theme resolution. Without data-theme the viewer's system preference decides,
+   as it always did. With it, the artifact's own choice wins in BOTH directions:
+   a page that hardcodes one palette must not be handed the opposite set of
+   tokens by the machine it happens to be opened on. The dark values appear
+   twice because a media query cannot be folded into a selector list.
+   The attribute sits inside :where() so these blocks keep the specificity of a
+   bare :root — the page's own <style> is linked after this file and must go on
+   overriding any token it wants, exactly as it could before. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+    --bg: #101318;
+    --surface: #181c23;
+    --text: #eef1f6;
+    --text-muted: #9aa4b2;
+    --border: rgba(238, 241, 246, 0.12);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --success: #4ade80;
+    --danger: #f87171;
+    --warning: #fbbf24;
+  }
+}
+:root:where([data-theme="dark"]) {
+  color-scheme: dark;
+  --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+  --bg: #101318;
+  --surface: #181c23;
+  --text: #eef1f6;
+  --text-muted: #9aa4b2;
+  --border: rgba(238, 241, 246, 0.12);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --success: #4ade80;
+  --danger: #f87171;
+  --warning: #fbbf24;
+}
+:root:where([data-theme="light"]) { color-scheme: light; }
+/* Pages generated before the shell had its own components still link the
+   basecoat CDN, which reads its own tokens and switches theme only on a
+   .dark class. Bridged to the shell's, whatever of it those pages use takes
+   the page's accent and follows the declared theme. Its --accent token is a
+   hover tint, renamed in its theme as --color-accent; the shell's --accent is
+   the brand colour, so the tint is derived from it here. */
+:root {
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-contrast);
+  --secondary: color-mix(in srgb, var(--text) 7%, var(--surface));
+  --secondary-foreground: var(--text);
+  --muted: color-mix(in srgb, var(--text) 5%, var(--surface));
+  --muted-foreground: var(--text-muted);
+  --color-accent: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  --color-accent-foreground: var(--text);
+  --destructive: var(--danger);
+  --input: var(--border);
+  --ring: var(--accent);
+}
+* { box-sizing: border-box; }
+/* The reset the pages were written against: they all linked basecoat, which
+   ships Tailwind's. Its components now live here, so the reset does too. */
+*, ::before, ::after, ::backdrop { margin: 0; padding: 0; border: 0 solid; }
+h1, h2, h3, h4, h5, h6 { font-size: inherit; font-weight: inherit; }
+a { color: inherit; text-decoration: inherit; }
+b, strong { font-weight: bolder; }
+ol, ul, menu { list-style: none; }
+svg, video, canvas, iframe { display: block; vertical-align: middle; }
+button, input, select, textarea { color: inherit; background-color: transparent; border-radius: 0; }
+table { border-collapse: collapse; }
+hr { height: 0; color: inherit; border-top-width: 1px; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+
+.shell-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.shell-section { padding: calc(var(--space) * 2) 0; }
+.shell-grid { display: grid; gap: var(--space); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.shell-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: var(--space); }
+.shell-footer { padding: 24px 0 40px; color: var(--text-muted); font-size: 13px; }
+
+.shell-hero { padding: calc(var(--space) * 3) 0 calc(var(--space) * 2); }
+.shell-hero h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
+.shell-hero p { color: var(--text-muted); max-width: 60ch; margin: 0; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space);
+}
+
+.kpi { display: flex; flex-direction: column; gap: 4px; }
+.kpi .kpi-value { font-size: 28px; font-weight: 650; line-height: 1.1; }
+.kpi .kpi-label { font-size: 13px; color: var(--text-muted); }
+.kpi .kpi-delta { font-size: 12.5px; font-weight: 600; }
+.kpi .kpi-delta.up { color: var(--success); }
+.kpi .kpi-delta.down { color: var(--danger); }
+
+table.shell-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+table.shell-table th {
+  text-align: left; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600;
+}
+table.shell-table th, table.shell-table td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--border); }
+table.shell-table td.num, table.shell-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+.chart-box { width: 100%; min-height: 220px; }
+.chart-box svg { width: 100%; height: auto; display: block; }
+
+.muted { color: var(--text-muted); }
+.accent { color: var(--accent-text); }
+.shell-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shell-fade { animation: shell-fade 400ms ease both; }
+  @keyframes shell-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+
+/* Layout and type utilities: what the pages kept spelling in style="".
+   Spacing and type sizes follow Tailwind's scale; there is no Tailwind. */
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.stack { display: flex; flex-direction: column; gap: var(--space); }
+.between { justify-content: space-between; }
+.grow { flex: 1 1 0; min-width: 0; }
+.cols-2, .cols-3, .cols-4 { display: grid; gap: var(--space); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) {
+  .cols-2, .cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1000px) { .cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.gap-1 { gap: 4px; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; } .gap-6 { gap: 24px; }
+.m-0 { margin: 0; }
+.mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; } .mt-6 { margin-top: 24px; }
+.mb-1 { margin-bottom: 4px; } .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; } .mb-6 { margin-bottom: 24px; }
+.p-2 { padding: 8px; } .p-3 { padding: 12px; } .p-4 { padding: 16px; } .p-6 { padding: 24px; }
+.text-xs { font-size: 12px; } .text-sm { font-size: 14px; } .text-base { font-size: 16px; }
+.text-lg { font-size: 18px; } .text-xl { font-size: 20px; line-height: 1.35; }
+.text-2xl { font-size: 24px; line-height: 1.25; } .text-3xl { font-size: 30px; line-height: 1.2; }
+.font-medium { font-weight: 500; } .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+.text-right { text-align: right; } .text-center { text-align: center; }
+.nowrap { white-space: nowrap; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.w-full { width: 100%; }
+.text-success { color: var(--success); } .text-danger { color: var(--danger); } .text-warning { color: var(--warning); }
+
+/* Components, with basecoat 1.0 markup (variants and sizes are data
+   attributes) and the shell tokens, so a page needs neither component CSS
+   nor a CSS framework. An older page that also links basecoat gets these
+   rules after it, over the same properties. */
+button, input, select, textarea { font: inherit; }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 36px; padding: 0 14px; border: 1px solid transparent; border-radius: calc(var(--radius) - 2px);
+  background: var(--accent); color: var(--accent-contrast);
+  font-size: 14px; font-weight: 500; line-height: 1; white-space: nowrap; text-decoration: none; cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.btn:hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+.btn[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.btn[data-variant="secondary"]:hover { background: color-mix(in srgb, var(--text) 14%, var(--surface)); }
+.btn[data-variant="outline"] { background: var(--surface); color: var(--text); border-color: var(--border); }
+.btn[data-variant="ghost"] { background: transparent; color: var(--text); }
+.btn[data-variant="outline"]:hover, .btn[data-variant="ghost"]:hover { background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+.btn[data-variant="destructive"] { background: var(--danger); color: var(--bg); }
+.btn[data-variant="destructive"]:hover { background: color-mix(in srgb, var(--danger) 86%, var(--text)); }
+.btn[data-variant="link"] { height: auto; padding: 0; background: none; color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
+.btn[data-size="sm"] { height: 30px; padding: 0 10px; font-size: 13px; }
+.btn[data-size="lg"] { height: 42px; padding: 0 20px; font-size: 15px; }
+.btn[data-size="icon"] { width: 36px; padding: 0; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+  border: 1px solid transparent; border-radius: 999px; background: var(--accent); color: var(--accent-contrast);
+  font-size: 12px; font-weight: 600; line-height: 1.5; white-space: nowrap;
+}
+.badge[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.badge[data-variant="outline"] { background: transparent; color: var(--text); border-color: var(--border); }
+.badge[data-variant="destructive"] { background: color-mix(in srgb, var(--danger) 14%, var(--surface)); color: var(--danger); }
+
+.alert {
+  display: grid; gap: 4px; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+.alert h2, .alert h3 { margin: 0; font-size: 14px; font-weight: 600; }
+.alert p, .alert section { margin: 0; color: var(--text-muted); }
+.alert[data-variant="destructive"] { border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); background: color-mix(in srgb, var(--danger) 7%, var(--surface)); color: var(--danger); }
+
+.card {
+  display: flex; flex-direction: column; gap: 16px; padding: 20px 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px);
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow);
+}
+.card > header, .card > section, .card > footer { padding: 0 20px; }
+.card > header { display: grid; gap: 4px; }
+.card > header h2, .card > header h3 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.3; }
+.card > header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+.card > footer { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+.input {
+  width: 100%; min-height: 36px; padding: 6px 12px; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+textarea.input { min-height: 84px; resize: vertical; }
+.input::placeholder { color: var(--text-muted); }
+.input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 14px; font-weight: 500; }
+.field [role="alert"] { color: var(--danger); font-size: 13px; }
+
+dialog.dialog {
+  width: min(520px, calc(100vw - 32px)); max-height: calc(100vh - 32px); margin: auto; padding: 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 4px);
+  background: var(--surface); color: var(--text); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+dialog.dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+dialog.dialog > div { display: grid; gap: 16px; padding: 24px; }
+dialog.dialog header { display: grid; gap: 4px; }
+dialog.dialog header h2 { margin: 0; font-size: 18px; font-weight: 600; }
+dialog.dialog header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+dialog.dialog footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+.tabs { display: grid; gap: 12px; }
+.tabs > [role="tablist"] {
+  display: inline-flex; gap: 4px; width: fit-content; max-width: 100%; padding: 4px; overflow-x: auto;
+  border-radius: var(--radius); background: color-mix(in srgb, var(--text) 6%, var(--surface));
+}
+.tabs [role="tab"] {
+  padding: 6px 12px; border: 0; border-radius: calc(var(--radius) - 4px); background: transparent;
+  color: var(--text-muted); font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer;
+}
+.tabs [role="tab"][aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.tabs [role="tabpanel"][hidden] { display: none; }
+
+.accordion > details { border-bottom: 1px solid var(--border); }
+.accordion > details > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 0; font-weight: 500; list-style: none; cursor: pointer;
+}
+.accordion > details > summary::-webkit-details-marker { display: none; }
+.accordion > details > summary::after { content: "+"; color: var(--text-muted); font-size: 18px; line-height: 1; }
+.accordion > details[open] > summary::after { content: "\2212"; }
+.accordion > details > :not(summary) { margin: 0 0 14px; color: var(--text-muted); }
+
+.toaster {
+  position: fixed; right: 16px; bottom: 16px; z-index: 50; display: flex; flex-direction: column-reverse; gap: 8px;
+  width: min(360px, calc(100vw - 32px)); pointer-events: none;
+}
+.toaster .toast { pointer-events: auto; transition: opacity 200ms ease, transform 200ms ease; }
+.toaster .toast[aria-hidden="true"] { opacity: 0; transform: translateY(8px); }
+.toaster .toast-content {
+  padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); font-size: 13px;
+}
+.toaster .toast-content h2 { margin: 0 0 2px; font-size: 14px; font-weight: 600; }
+.toaster .toast-content p { margin: 0; color: var(--text-muted); }
+
+/* skipUI building blocks. */
+.skip-table-search { max-width: 320px; margin-bottom: 12px; }
+.skip-table-wrap { overflow-x: auto; }
+table.shell-table th[data-sort] { cursor: pointer; user-select: none; }
+table.shell-table th[aria-sort="ascending"]::after { content: " \25B2"; font-size: 9px; }
+table.shell-table th[aria-sort="descending"]::after { content: " \25BC"; font-size: 9px; }
+table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: center; padding: 24px 0; }
+.skip-pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; font-size: 13px; color: var(--text-muted); }
+.toaster .toast[data-type="success"] .toast-content { border-left: 3px solid var(--success); }
+.toaster .toast[data-type="error"] .toast-content { border-left: 3px solid var(--danger); }
+
+</style>
+  <script>
+/* Skip artifact shell — fixed helpers served beside every artifact. */
+(function () {
+  "use strict";
+
+  var fmt = {
+    num: function (v, opts) { return new Intl.NumberFormat("pt-BR", opts || {}).format(v); },
+    brl: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v); },
+    pct: function (v) { return new Intl.NumberFormat("pt-BR", { style: "percent", maximumFractionDigits: 1 }).format(v); }
+  };
+
+  // axisFmt keeps axis tick labels short (compact notation) so long values
+  // (e.g. full BRL amounts) never clip against the plot edge.
+  function axisFmt(v) {
+    return fmt.num(v, { notation: "compact", maximumFractionDigits: 1 });
+  }
+
+  // format accepts a function OR one of the fmt names ("num" | "brl" | "pct").
+  function coerceFormat(spec) {
+    if (typeof spec === "function") return spec;
+    if (typeof spec === "string" && fmt[spec]) return fmt[spec];
+    return function (v) { return fmt.num(v); };
+  }
+
+  function accent() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#2563eb";
+  }
+  function mutedColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--text-muted").trim() || "#5b6472";
+  }
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function frame(el, w, h) {
+    var svg = svgEl("svg", { viewBox: "0 0 " + w + " " + h, role: "img" });
+    el = resolve(el);
+    el.innerHTML = "";
+    el.appendChild(svg);
+    return svg;
+  }
+
+  // maxOf guards the axis scale: empty values would give -Infinity (truthy,
+  // so "|| 1" can't catch it) and a non-positive max would flip the chart.
+  function maxOf(values) {
+    var m = values.length ? Math.max.apply(null, values) : 0;
+    return m > 0 ? m : 1;
+  }
+
+  // bar(el, {labels:[], values:[], color?, format?}) — vertical bar chart.
+  function bar(el, cfg) {
+    var W = 640, H = 280, padL = 46, padB = 30, padT = 12;
+    var svg = frame(el, W, H);
+    var max = maxOf(cfg.values);
+    var n = cfg.values.length;
+    var plotW = W - padL - 12, plotH = H - padT - padB;
+    var step = plotW / n, bw = Math.min(step * 0.62, 64);
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: padL, y1: gy, x2: W - 12, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axisFmt((max * g) / 4);
+      svg.appendChild(lbl);
+    }
+    cfg.values.forEach(function (v, i) {
+      var bh = Math.max(0, (v / max) * plotH);
+      var x = padL + i * step + (step - bw) / 2;
+      var y = padT + plotH - bh;
+      var r = svgEl("rect", { x: x, y: y, width: bw, height: bh, rx: 4, fill: color });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + f(v);
+      r.appendChild(t);
+      svg.appendChild(r);
+      var tx = svgEl("text", { x: x + bw / 2, y: H - 10, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      tx.textContent = cfg.labels[i];
+      svg.appendChild(tx);
+    });
+  }
+
+  // line(el, {labels:[], values:[], color?, format?}) — single-series line.
+  function line(el, cfg) {
+    var W = 640, H = 280, padL = 46, padB = 30, padT = 12;
+    var svg = frame(el, W, H);
+    var max = maxOf(cfg.values);
+    var n = cfg.values.length;
+    var plotW = W - padL - 16, plotH = H - padT - padB;
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: padL, y1: gy, x2: W - 16, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axisFmt((max * g) / 4);
+      svg.appendChild(lbl);
+    }
+    var pts = cfg.values.map(function (v, i) {
+      var x = padL + (n === 1 ? plotW / 2 : (plotW * i) / (n - 1));
+      var y = padT + plotH - (v / max) * plotH;
+      return [x, y];
+    });
+    var d = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
+    svg.appendChild(svgEl("path", { d: d, fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round" }));
+    pts.forEach(function (p, i) {
+      var c = svgEl("circle", { cx: p[0], cy: p[1], r: 3.5, fill: color });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + f(cfg.values[i]);
+      c.appendChild(t);
+      svg.appendChild(c);
+      var tx = svgEl("text", { x: p[0], y: H - 10, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      tx.textContent = cfg.labels[i];
+      svg.appendChild(tx);
+    });
+  }
+
+  // donut(el, {labels:[], values:[], colors?}) — donut with center total.
+  function donut(el, cfg) {
+    var W = 320, H = 280, cx = W / 2, cy = H / 2, R = 92, r = 58;
+    var svg = frame(el, W, H);
+    // At 100% of a wide container the donut outgrows the height pages give
+    // the box and spills over the next section: keep it at its own size.
+    svg.style.maxWidth = W + "px";
+    svg.style.margin = "0 auto";
+    var total = cfg.values.reduce(function (a, b) { return a + b; }, 0) || 1;
+    var palette = cfg.colors || [accent(), "#1baf7a", "#eda100", "#e34948", "#4a3aa7", "#e87ba4"];
+    var a0 = -Math.PI / 2;
+    cfg.values.forEach(function (v, i) {
+      var a1 = a0 + (v / total) * Math.PI * 2;
+      var large = a1 - a0 > Math.PI ? 1 : 0;
+      var p = ["M", cx + R * Math.cos(a0), cy + R * Math.sin(a0),
+        "A", R, R, 0, large, 1, cx + R * Math.cos(a1), cy + R * Math.sin(a1),
+        "L", cx + r * Math.cos(a1), cy + r * Math.sin(a1),
+        "A", r, r, 0, large, 0, cx + r * Math.cos(a0), cy + r * Math.sin(a0), "Z"].join(" ");
+      var path = svgEl("path", { d: p, fill: palette[i % palette.length] });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + fmt.num(v) + " (" + fmt.pct(v / total) + ")";
+      path.appendChild(t);
+      svg.appendChild(path);
+      a0 = a1;
+    });
+    var center = svgEl("text", { x: cx, y: cy + 5, "text-anchor": "middle", "font-size": 20, "font-weight": 650, fill: "currentColor" });
+    center.textContent = fmt.num(total);
+    svg.appendChild(center);
+  }
+
+  // ---- Page building blocks: what dashboards and small systems kept
+  // re-implementing — a searchable sortable table, a KPI row, tabs, toasts,
+  // dialogs, saved state and mock data. Every call is opt-in, so a page that
+  // brings its own versions keeps them.
+
+  function resolve(target) {
+    return typeof target === "string" ? document.querySelector(target) : target;
+  }
+
+  function node(tag, className, text) {
+    var el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  function isNumberColumn(col) {
+    return col.align === "right" || col.format === "num" || col.format === "brl" || col.format === "pct";
+  }
+
+  function cellText(col, row) {
+    var value = row[col.key];
+    if (value == null) return "";
+    return col.format ? coerceFormat(col.format)(value) : String(value);
+  }
+
+  function compareValues(a, b) {
+    if (typeof a === "number" && typeof b === "number") return a - b;
+    return String(a == null ? "" : a).localeCompare(String(b == null ? "" : b), "pt-BR", { numeric: true });
+  }
+
+  // table(el, {columns, rows, search?, pageSize?, empty?, onRowClick?}) — a
+  // table.shell-table with sortable headers, an optional search box and
+  // pager. A column is {key, label, format?, align?, sortable? (true),
+  // render?(value, row) returning a Node or an HTML string — the page writes
+  // its cell templates as markup}. Plain values are always set as text.
+  // Returns {setRows, rows}.
+  function table(target, cfg) {
+    var root = resolve(target);
+    var cols = cfg.columns || [];
+    var pageSize = cfg.pageSize || 0;
+    var state = { rows: (cfg.rows || []).slice(), query: "", key: null, dir: 1, page: 0 };
+    root.innerHTML = "";
+    if (cfg.search) {
+      var search = node("input", "input skip-table-search");
+      search.type = "search";
+      search.placeholder = typeof cfg.search === "string" ? cfg.search : "Buscar…";
+      search.setAttribute("aria-label", search.placeholder);
+      search.addEventListener("input", function () {
+        state.query = search.value.trim().toLowerCase();
+        state.page = 0;
+        draw();
+      });
+      root.appendChild(search);
+    }
+    var tableEl = node("table", "shell-table");
+    var headRow = node("tr");
+    var heads = cols.map(function (col) {
+      var th = node("th", isNumberColumn(col) ? "num" : "", col.label == null ? col.key : col.label);
+      th.scope = "col";
+      if (col.sortable !== false) {
+        var toggle = function () {
+          state.dir = state.key === col.key ? -state.dir : 1;
+          state.key = col.key;
+          draw();
+        };
+        th.setAttribute("data-sort", col.key);
+        th.tabIndex = 0;
+        th.addEventListener("click", toggle);
+        th.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+        });
+      }
+      headRow.appendChild(th);
+      return th;
+    });
+    var thead = node("thead");
+    var tbody = node("tbody");
+    var wrap = node("div", "skip-table-wrap");
+    var pager = node("div", "skip-pager");
+    thead.appendChild(headRow);
+    tableEl.appendChild(thead);
+    tableEl.appendChild(tbody);
+    wrap.appendChild(tableEl);
+    root.appendChild(wrap);
+    if (pageSize) root.appendChild(pager);
+
+    function visibleRows() {
+      var rows = state.rows;
+      if (state.query) {
+        rows = rows.filter(function (row) {
+          return cols.some(function (col) { return cellText(col, row).toLowerCase().indexOf(state.query) >= 0; });
+        });
+      }
+      if (state.key) {
+        var key = state.key, dir = state.dir;
+        rows = rows.slice().sort(function (a, b) { return dir * compareValues(a[key], b[key]); });
+      }
+      return rows;
+    }
+
+    function drawRow(row) {
+      var tr = node("tr");
+      cols.forEach(function (col) {
+        var td = node("td", isNumberColumn(col) ? "num" : "");
+        if (!col.render) {
+          td.textContent = cellText(col, row);
+        } else {
+          var content = col.render(row[col.key], row);
+          if (content instanceof Node) td.appendChild(content);
+          else td.innerHTML = content == null ? "" : String(content);
+        }
+        tr.appendChild(td);
+      });
+      // The row stays a row (no role) and takes focus, so a keyboard reaches
+      // the same action; keys pressed on a control inside a cell are its own.
+      if (cfg.onRowClick) {
+        tr.style.cursor = "pointer";
+        tr.tabIndex = 0;
+        tr.addEventListener("click", function () { cfg.onRowClick(row); });
+        tr.addEventListener("keydown", function (e) {
+          if (e.target !== tr || (e.key !== "Enter" && e.key !== " ")) return;
+          e.preventDefault();
+          cfg.onRowClick(row);
+        });
+      }
+      return tr;
+    }
+
+    function pagerButton(label, disabled, step) {
+      var button = node("button", "btn", label);
+      button.type = "button";
+      button.setAttribute("data-variant", "outline");
+      button.setAttribute("data-size", "sm");
+      button.disabled = disabled;
+      button.addEventListener("click", function () { state.page += step; draw(); });
+      return button;
+    }
+
+    function draw() {
+      var rows = visibleRows();
+      heads.forEach(function (th, i) {
+        if (cols[i].key === state.key) th.setAttribute("aria-sort", state.dir > 0 ? "ascending" : "descending");
+        else th.removeAttribute("aria-sort");
+      });
+      var pages = pageSize ? Math.max(1, Math.ceil(rows.length / pageSize)) : 1;
+      state.page = Math.min(state.page, pages - 1);
+      var shown = pageSize ? rows.slice(state.page * pageSize, (state.page + 1) * pageSize) : rows;
+      tbody.innerHTML = "";
+      if (!shown.length) {
+        var empty = node("td", "skip-table-empty", cfg.empty || "Nenhum registro encontrado.");
+        empty.colSpan = cols.length;
+        tbody.appendChild(node("tr")).appendChild(empty);
+      }
+      shown.forEach(function (row) { tbody.appendChild(drawRow(row)); });
+      if (!pageSize) return;
+      pager.innerHTML = "";
+      var from = rows.length ? state.page * pageSize + 1 : 0;
+      pager.appendChild(node("span", "", from + "–" + Math.min(rows.length, (state.page + 1) * pageSize) + " de " + rows.length));
+      var nav = node("div", "row gap-2");
+      nav.appendChild(pagerButton("Anterior", state.page === 0, -1));
+      nav.appendChild(pagerButton("Próxima", state.page >= pages - 1, 1));
+      pager.appendChild(nav);
+    }
+
+    draw();
+    return {
+      setRows: function (rows) { state.rows = rows.slice(); draw(); },
+      rows: visibleRows
+    };
+  }
+
+  // kpis(el, [{label, value, format?, delta?, hint?}]) — KPI cards in a
+  // responsive grid; delta is a fraction (0.12 renders as ▲ 12%).
+  function kpis(target, items) {
+    var root = resolve(target);
+    root.innerHTML = "";
+    root.classList.add("shell-grid");
+    items.forEach(function (item) {
+      var card = node("div", "panel kpi");
+      card.appendChild(node("span", "kpi-label", item.label));
+      card.appendChild(node("span", "kpi-value", item.format ? coerceFormat(item.format)(item.value) : String(item.value)));
+      if (typeof item.delta === "number") {
+        var up = item.delta >= 0;
+        card.appendChild(node("span", "kpi-delta " + (up ? "up" : "down"), (up ? "▲ " : "▼ ") + fmt.pct(Math.abs(item.delta))));
+      }
+      if (item.hint) card.appendChild(node("span", "kpi-label", item.hint));
+      root.appendChild(card);
+    });
+  }
+
+  // badge(text, variant?) — a .badge node for table cells and lists;
+  // variant is "secondary" | "outline" | "destructive" (default: primary).
+  function badge(text, variant) {
+    var el = node("span", "badge", text);
+    if (variant) el.setAttribute("data-variant", variant);
+    return el;
+  }
+
+  // tabs(el) — wires one .tabs block: [role=tab] buttons inside
+  // [role=tablist], each with aria-controls naming its [role=tabpanel].
+  function tabs(target) {
+    var root = resolve(target);
+    var buttons = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+    function select(chosen) {
+      buttons.forEach(function (b) {
+        var on = b === chosen;
+        b.setAttribute("aria-selected", on ? "true" : "false");
+        b.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(b.getAttribute("aria-controls"));
+        if (panel) panel.hidden = !on;
+      });
+    }
+    buttons.forEach(function (b, i) {
+      b.addEventListener("click", function () { select(b); });
+      b.addEventListener("keydown", function (e) {
+        var step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!step) return;
+        var next = buttons[(i + step + buttons.length) % buttons.length];
+        next.focus();
+        select(next);
+      });
+    });
+    select(buttons.filter(function (b) { return b.getAttribute("aria-selected") === "true"; })[0] || buttons[0]);
+  }
+
+  // toast(message, {type?: "success" | "error", title?, duration?}) — a
+  // .toast in a shared .toaster at the bottom of the page.
+  function toast(message, opts) {
+    opts = opts || {};
+    var toaster = document.querySelector(".toaster") || document.body.appendChild(node("div", "toaster"));
+    var item = node("div", "toast");
+    item.setAttribute("role", opts.type === "error" ? "alert" : "status");
+    item.setAttribute("aria-hidden", "true");
+    if (opts.type) item.setAttribute("data-type", opts.type);
+    var content = node("div", "toast-content");
+    var section = node("section");
+    if (opts.title) section.appendChild(node("h2", "", opts.title));
+    section.appendChild(node("p", "", message));
+    content.appendChild(section);
+    item.appendChild(content);
+    toaster.appendChild(item);
+    requestAnimationFrame(function () { item.setAttribute("aria-hidden", "false"); });
+    setTimeout(function () {
+      item.setAttribute("aria-hidden", "true");
+      setTimeout(function () { item.remove(); }, 400);
+    }, opts.duration || 3000);
+  }
+
+  // Dialogs are native <dialog class="dialog">: a [data-dialog-open="id"]
+  // anywhere opens one, a [data-dialog-close] inside closes it, and a click on
+  // its backdrop closes it too. Plain dialog.showModal()/close() still work.
+  document.addEventListener("click", function (e) {
+    var target = e.target;
+    if (!(target instanceof Element)) return;
+    var opener = target.closest("[data-dialog-open]");
+    if (opener) {
+      var dialog = document.getElementById(opener.getAttribute("data-dialog-open"));
+      if (dialog && dialog.showModal && !dialog.open) dialog.showModal();
+      return;
+    }
+    var closer = target.closest("[data-dialog-close]");
+    if (closer && closer.closest("dialog")) {
+      closer.closest("dialog").close();
+      return;
+    }
+    if (target.tagName === "DIALOG" && target.classList.contains("dialog") && target.open) target.close();
+  });
+
+  // store(key, fallback) — JSON state in localStorage that never throws (a
+  // private window or a full quota falls back to memory): {get, set, update}.
+  function store(key, fallback) {
+    var memory;
+    // Set while the last write did not reach localStorage: what is stored
+    // there is older than memory until a write goes through again.
+    var unsaved = false;
+    var initial = function () { return fallback === undefined ? undefined : JSON.parse(JSON.stringify(fallback)); };
+    function get() {
+      if (!unsaved) {
+        try {
+          var raw = localStorage.getItem(key);
+          if (raw != null) return JSON.parse(raw);
+        } catch (e) { /* storage unavailable: memory below */ }
+      }
+      return memory !== undefined ? memory : initial();
+    }
+    function set(value) {
+      memory = value;
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+        unsaved = false;
+      } catch (e) {
+        unsaved = true;
+      }
+      return value;
+    }
+    return { get: get, set: set, update: function (fn) { return set(fn(get())); } };
+  }
+
+  // mock — seeded random data, so a page asks for 90 days of numbers in one
+  // line instead of writing them out; the same seed gives the same data.
+  var FIRST = ["Ana", "Bruno", "Carla", "Diego", "Eduarda", "Felipe", "Gabriela", "Henrique", "Isabela", "João",
+    "Larissa", "Marcos", "Natália", "Otávio", "Paula", "Rafael", "Sofia", "Thiago", "Vanessa", "Lucas"];
+  var LAST = ["Silva", "Santos", "Oliveira", "Souza", "Pereira", "Costa", "Rodrigues", "Almeida", "Nascimento", "Lima",
+    "Araújo", "Fernandes", "Carvalho", "Gomes", "Martins", "Rocha", "Ribeiro", "Barbosa"];
+  var CITIES = ["São Paulo, SP", "Rio de Janeiro, RJ", "Belo Horizonte, MG", "Curitiba, PR", "Porto Alegre, RS",
+    "Salvador, BA", "Recife, PE", "Fortaleza, CE", "Brasília, DF", "Goiânia, GO", "Campinas, SP", "Florianópolis, SC",
+    "Manaus, AM", "Belém, PA", "Vitória, ES", "Natal, RN"];
+
+  function createMock(seed) {
+    var state = seed >>> 0;
+    function random() {
+      state = (state + 0x6d2b79f5) >>> 0;
+      var t = state;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    function int(min, max) { return min + Math.floor(random() * (max - min + 1)); }
+    function pick(list) { return list[Math.floor(random() * list.length)]; }
+    var mock = {
+      seed: function (value) { state = value >>> 0; return mock; },
+      random: random,
+      int: int,
+      float: function (min, max, decimals) {
+        var factor = Math.pow(10, decimals == null ? 2 : decimals);
+        return Math.round((min + random() * (max - min)) * factor) / factor;
+      },
+      pick: pick,
+      chance: function (p) { return random() < p; },
+      name: function () { return pick(FIRST) + " " + pick(LAST); },
+      city: function () { return pick(CITIES); },
+      // series(n, {start, trend, noise, min, decimals}) — a walk: each value
+      // moves by trend (fraction per step) plus up to ±noise of itself.
+      series: function (n, opts) {
+        opts = opts || {};
+        var value = opts.start == null ? 100 : opts.start;
+        var factor = Math.pow(10, opts.decimals || 0);
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          out.push(Math.max(opts.min == null ? 0 : opts.min, Math.round(value * factor) / factor));
+          value = value * (1 + (opts.trend || 0)) * (1 + (random() * 2 - 1) * (opts.noise == null ? 0.08 : opts.noise));
+        }
+        return out;
+      },
+      // dates(n, {end?, step?: "day" | "week" | "month"}) — ISO dates
+      // (YYYY-MM-DD), oldest first, ending at end (default: today).
+      dates: function (n, opts) {
+        opts = opts || {};
+        var end = opts.end ? new Date(opts.end) : new Date();
+        var out = [];
+        for (var i = n - 1; i >= 0; i--) {
+          var d = new Date(end.getTime());
+          if (opts.step === "month") d.setMonth(d.getMonth() - i);
+          else d.setDate(d.getDate() - i * (opts.step === "week" ? 7 : 1));
+          out.push(d.toISOString().slice(0, 10));
+        }
+        return out;
+      },
+      // rows(n, spec) — n objects; each spec value is a function(i), a list
+      // to pick from, or a constant.
+      rows: function (n, spec) {
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          var row = {};
+          for (var key in spec) {
+            var value = spec[key];
+            row[key] = typeof value === "function" ? value(i) : Array.isArray(value) ? pick(value) : value;
+          }
+          out.push(row);
+        }
+        return out;
+      }
+    };
+    return mock;
+  }
+
+  window.skipShell = { fmt: fmt };
+  window.skipChart = { bar: bar, line: line, donut: donut };
+  window.skipUI = { table: table, kpis: kpis, badge: badge, tabs: tabs, toast: toast };
+  window.skipStore = store;
+  window.skipMock = createMock(20261022);
+})();
+
+</script>
+  <style>
+    :root {
+      --accent: #0f766e;
+      --accent-contrast: #ffffff;
+      --bg: #f6f8f9;
+      --surface: #ffffff;
+      --text: #10242b;
+      --text-muted: #52636a;
+      --border: #d7e0e4;
+      --amber: #d97706;
+      --amber-light: #fef3c7;
+      --amber-dark: #92400e;
+      --radius: 14px;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding-bottom: 24px;
+    }
+
+    /* Faixa compacta após rolagem */
+    .compact-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      z-index: 100;
+      background: rgba(235, 245, 242, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 3px solid #e8a33d;
+      border-bottom: 1px solid #b8d5cd;
+      box-shadow: 0 4px 18px rgba(16, 36, 43, 0.1);
+      transform: translateY(-100%);
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.28s;
+      visibility: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .compact-nav.is-visible {
+      transform: translateY(0);
+      visibility: visible;
+    }
+    .compact-nav.is-hidden {
+      transform: translateY(-100%);
+      visibility: hidden;
+    }
+    .compact-nav-inner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .compact-title-wrap {
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+    .compact-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+    .compact-section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--accent-text);
+      background: rgba(15, 118, 110, 0.12);
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-top: 2px;
+    }
+    .compact-title-short {
+      display: none;
+    }
+    .compact-actions-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+    .compact-prog-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      min-width: 110px;
+    }
+    .compact-prog-bar-wrap {
+      width: 100%;
+      height: 4px;
+      background: #d4e2df;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 3px;
+    }
+    .compact-prog-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), #e8a33d);
+      transition: width 0.3s ease;
+    }
+    .compact-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .compact-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(16, 36, 43, 0.08);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .compact-btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      transition: transform 0.18s ease;
+    }
+    .compact-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 36, 43, 0.14);
+    }
+    .compact-btn:hover svg {
+      transform: scale(1.06);
+    }
+    .compact-btn:active {
+      transform: translateY(0) scale(0.97);
+      box-shadow: none;
+    }
+    .compact-btn-lab {
+      background: #0f766e;
+      color: #ffffff;
+      border: 1px solid #0d645d;
+    }
+    .compact-btn-lab:hover {
+      background: #0d6b63;
+    }
+    .compact-btn-lab:focus-visible {
+      outline: 3px solid #e8a33d;
+      outline-offset: 2px;
+    }
+    .compact-btn-quiz {
+      background: #e8a33d;
+      color: #10242b;
+      border: 1px solid #c98525;
+    }
+    .compact-btn-quiz:hover {
+      background: #e09930;
+    }
+    .compact-btn-quiz:focus-visible {
+      outline: 3px solid #0f766e;
+      outline-offset: 2px;
+    }
+    @media (max-width: 720px) {
+      .compact-nav { height: 52px; }
+      .compact-nav-inner { gap: 8px; }
+      .compact-title-full { display: none; }
+      .compact-title-short { display: none; }
+      .compact-section-badge { margin-top: 0; font-size: 0.78rem; padding: 4px 8px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .compact-prog-box { display: none; }
+      .compact-btn-label { display: none; }
+      .compact-btn {
+        width: 40px;
+        min-width: 40px;
+        height: 36px;
+        padding: 0;
+      }
+    }
+
+    /* Banner de Abertura (Hero Único) */
+    .opening-banner {
+      background: linear-gradient(135deg, #e8f4f1 0%, #f6fbf9 100%);
+      border: 1px solid #b8d5cd;
+      border-top: 4px solid #e8a33d;
+      border-left: 5px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 24px;
+      color: #10242b;
+      box-shadow: 0 4px 16px rgba(16, 36, 43, 0.05);
+      text-align: left;
+    }
+    .opening-banner-layout {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+    .opening-banner-content {
+      flex: 1 1 auto;
+      text-align: left;
+    }
+    .opening-banner-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+      flex-shrink: 0;
+      min-width: 320px;
+    }
+    .banner-prog-card {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #c7dcd6;
+      border-radius: 9px;
+      padding: 8px 12px;
+      box-sizing: border-box;
+    }
+    .banner-action-buttons-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      width: 100%;
+    }
+    .banner-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 44px;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      box-sizing: border-box;
+      box-shadow: 0 2px 8px rgba(16, 36, 43, 0.10);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+    .banner-action-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      transition: transform 0.18s ease;
+    }
+    .banner-action-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(16, 36, 43, 0.16);
+    }
+    .banner-action-btn:hover svg {
+      transform: scale(1.06);
+    }
+    .banner-action-btn:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: none;
+    }
+    .banner-btn-lab {
+      background: #0f766e;
+      color: #ffffff;
+      border: 1px solid #0d645d;
+    }
+    .banner-btn-lab svg {
+      color: #ffffff;
+    }
+    .banner-btn-lab:hover {
+      background: #0d6b63;
+    }
+    .banner-btn-lab:focus-visible {
+      outline: 3px solid #e8a33d;
+      outline-offset: 2px;
+    }
+    .banner-btn-quiz {
+      background: #e8a33d;
+      color: #10242b;
+      border: 1px solid #c98525;
+    }
+    .banner-btn-quiz svg {
+      color: #10242b;
+    }
+    .banner-btn-quiz:hover {
+      background: #e09930;
+    }
+    .banner-btn-quiz:focus-visible {
+      outline: 3px solid #0f766e;
+      outline-offset: 2px;
+    }
+
+    /* Rótulos responsivos dos botões de ação */
+    .btn-text-short {
+      display: none;
+    }
+    .btn-text-full {
+      display: inline;
+    }
+
+    /* GRADE SIMÉTRICA DE BOTÕES EM MODO RESPONSIVO (<= 720px) */
+    @media (max-width: 720px) {
+      .opening-banner-layout {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .opening-banner-actions {
+        width: 100%;
+        min-width: 0;
+        align-items: stretch;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid #c8ded8;
+      }
+      .banner-action-buttons-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        width: 100%;
+        margin-top: 16px;
+        box-sizing: border-box;
+      }
+      .banner-action-btn {
+        width: 100% !important;
+        min-height: 56px;
+        height: 56px;
+        border-radius: 14px;
+        font-size: 14px;
+        padding: 0 10px;
+        white-space: nowrap;
+      }
+    }
+    @media (max-width: 480px) {
+      .btn-text-full {
+        display: none !important;
+      }
+      .btn-text-short {
+        display: inline !important;
+      }
+    }
+    @media (max-width: 340px) {
+      .banner-action-buttons-row {
+        grid-template-columns: 1fr !important;
+        gap: 8px;
+      }
+      .banner-action-btn {
+        min-height: 48px;
+        height: 48px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .banner-action-btn,
+      .banner-action-btn svg,
+      .compact-btn,
+      .compact-btn svg {
+        transition: none !important;
+        transform: none !important;
+      }
+    }
+
+    /* Banner Final de Encerramento */
+    .closing-banner {
+      background: linear-gradient(135deg, #dbebe6 0%, #edf4f2 100%);
+      border: 1px solid #b8d5cd;
+      border-top: 4px solid #e8a33d;
+      border-radius: var(--radius);
+      padding: 24px;
+      color: #10242b;
+      box-shadow: 0 4px 14px rgba(16, 36, 43, 0.05);
+      text-align: left;
+    }
+
+    /* Accordion Referências (ABNT) */
+    .ref-accordion {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #ffffff;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+    .ref-header-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: #ffffff;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      transition: background 0.2s ease;
+    }
+    .ref-header-btn:hover {
+      background: #f2f7f6;
+    }
+    .ref-header-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+    .ref-chevron {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .ref-header-btn[aria-expanded="true"] .ref-chevron {
+      transform: rotate(180deg);
+    }
+    .ref-collapsible-wrapper {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .ref-collapsible-wrapper.is-open {
+      grid-template-rows: 1fr;
+    }
+    .ref-collapsible-inner {
+      overflow: hidden;
+    }
+    .citation-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.86rem;
+      line-height: 1.6;
+      color: #10242b;
+      user-select: all;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ref-chevron { transition: none !important; }
+      .ref-collapsible-wrapper { transition: none !important; }
+    }
+    .progress-bar-wrap {
+      width: 100%;
+      height: 4px;
+      background: #e2e8f0;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), #e8a33d);
+      transition: width 0.3s ease;
+    }
+
+    /* Tabs & Responsive Mobile Menu Navigation */
+    .nav-tabs-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+      z-index: 25;
+    }
+
+    /* MODO DESKTOP (> 720px): Barra horizontal confortável sem rolagem */
+    .custom-tabs-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 6px;
+      background: #e9eff2;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .tab-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.94rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .tab-btn:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.75);
+    }
+    .tab-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+    .tab-btn[aria-selected="true"] {
+      background: #ffffff;
+      color: var(--accent);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    .tab-counter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.07);
+      color: inherit;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn[aria-selected="true"] .tab-counter {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    /* MODO MOBILE (<= 720px): Menu dropdown responsivo com botão de toque largo */
+    .mobile-tab-nav {
+      display: none;
+      position: relative;
+      width: 100%;
+    }
+    .mobile-tab-trigger {
+      width: 100%;
+      min-height: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 16px;
+      background: #ffffff;
+      border: 1px solid #b8d5cd;
+      border-radius: 14px;
+      color: var(--text);
+      font-size: 0.94rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(16, 36, 43, 0.08);
+      transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      text-align: left;
+      box-sizing: border-box;
+    }
+    .mobile-tab-trigger:hover {
+      background: #f4f8f7;
+      border-color: #9ec2b8;
+      box-shadow: 0 4px 12px rgba(16, 36, 43, 0.12);
+    }
+    .mobile-tab-trigger:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .mobile-tab-trigger[aria-expanded="true"] {
+      background: #eef6f4;
+      border-color: var(--accent);
+      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.14);
+    }
+    .mobile-tab-trigger-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+    .mobile-tab-icon-box {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #e6f4f2;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .mobile-tab-icon-box svg {
+      width: 20px;
+      height: 20px;
+    }
+    .mobile-tab-trigger-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+      min-width: 0;
+    }
+    .mobile-tab-prefix {
+      font-size: 0.70rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .mobile-tab-current-label {
+      font-size: 0.94rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mobile-tab-chevron {
+      color: var(--accent);
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mobile-tab-trigger[aria-expanded="true"] .mobile-tab-chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Dropdown Panel */
+    .mobile-tab-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 14px 34px rgba(16, 36, 43, 0.18), 0 4px 10px rgba(16, 36, 43, 0.08);
+      z-index: 999;
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      animation: tabDropdownOpen 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes tabDropdownOpen {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .mobile-tab-dropdown.is-open {
+      display: flex;
+    }
+    .mobile-tab-option {
+      width: 100%;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.93rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .mobile-tab-option:hover {
+      background: #f1f6f5;
+      color: var(--accent);
+    }
+    .mobile-tab-option:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+      background: #f1f6f5;
+    }
+    .mobile-tab-option.is-active {
+      background: #e6f4f2;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .mobile-tab-option-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+    .mobile-tab-opt-badge {
+      font-size: 0.74rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .mobile-tab-opt-badge.badge-done {
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .mobile-tab-opt-badge.badge-pending {
+      background: #f1f5f9;
+      color: var(--text-muted);
+    }
+
+    /* Backdrop sutil ao abrir o menu */
+    .mobile-tab-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(16, 36, 43, 0.28);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      z-index: 990;
+    }
+    .mobile-tab-backdrop.is-open {
+      display: block;
+    }
+
+    @media (max-width: 720px) {
+      .custom-tabs-nav {
+        display: none !important;
+      }
+      .mobile-tab-nav {
+        display: block !important;
+      }
+    }
+
+    @media (min-width: 721px) {
+      .mobile-tab-nav {
+        display: none !important;
+      }
+      .mobile-tab-backdrop {
+        display: none !important;
+      }
+    }
+
+    .tab-content {
+      display: none;
+      scroll-margin-top: 70px;
+    }
+    .tab-content.is-active {
+      display: block;
+      animation: fadeIn 0.25s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tab-content.is-active { animation: none; }
+      .progress-bar-fill { transition: none; }
+      .compact-nav { transition: none !important; }
+      .compact-prog-bar-fill { transition: none !important; }
+      .mobile-tab-chevron { transition: none !important; }
+      .mobile-tab-dropdown { animation: none !important; }
+    }
+
+    /* Tooltip System (Gatilho + Portal Flutuante) */
+    .term-tip {
+      position: relative;
+      display: inline;
+      cursor: help;
+      border-bottom: 2px dotted var(--accent);
+      font-weight: 600;
+      color: var(--accent-text);
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+    .term-tip:hover {
+      background-color: rgba(15, 118, 110, 0.1);
+    }
+    .term-tip:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      background-color: rgba(15, 118, 110, 0.14);
+      border-radius: 3px;
+    }
+    /* Oculta o markup inline original para usar 100% via Portal flutuante sem cortes */
+    .term-tip .tip-box {
+      display: none !important;
+    }
+
+    /* Balão global montado diretamente no body (elimina clipping por overflow/cards) */
+    .portal-tooltip {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100000;
+      width: min(320px, calc(100vw - 24px));
+      max-width: calc(100vw - 24px);
+      background: #10242b;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.88rem; /* 14px */
+      line-height: 1.5;
+      font-weight: 400;
+      text-align: left;
+      box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.45), 0 6px 14px rgba(16, 36, 43, 0.3);
+      pointer-events: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate3d(0, 0, 0);
+      transition: opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1), transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.18s;
+      overflow-wrap: break-word;
+      word-break: normal;
+      user-select: text;
+    }
+    .portal-tooltip.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .portal-tooltip-content {
+      max-height: 60vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
+      padding-right: 2px;
+    }
+    .portal-tooltip-content:focus-visible {
+      outline: 1px dashed rgba(255, 255, 255, 0.5);
+      outline-offset: 2px;
+    }
+    .portal-tooltip-content::-webkit-scrollbar {
+      width: 5px;
+    }
+    .portal-tooltip-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 9999px;
+    }
+    .portal-tooltip-content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    /* Seta dinâmica indicadora */
+    .portal-tooltip-arrow {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #10242b;
+      pointer-events: none;
+      transform: rotate(45deg);
+    }
+    .portal-tooltip[data-side="top"] .portal-tooltip-arrow {
+      bottom: -5px;
+      border-right: 1px solid rgba(255, 255, 255, 0.16);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    .portal-tooltip[data-side="bottom"] .portal-tooltip-arrow {
+      top: -5px;
+      border-left: 1px solid rgba(255, 255, 255, 0.16);
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    .portal-tooltip[data-side="bottom-sheet"] .portal-tooltip-arrow {
+      display: none;
+    }
+
+    /* Stepper */
+    .stepper-nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    .step-pill {
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+      padding: 8px 10px;
+      background: #f1f5f7;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+      color: var(--text-muted);
+    }
+    .step-pill.is-active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .step-pill.is-done {
+      background: #e6f4f2;
+      color: var(--accent);
+      border-color: #a3d9d3;
+    }
+
+    /* Video lazy loader */
+    .video-card-thumb {
+      position: relative;
+      padding-top: 56.25%;
+      background: #1a2529;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .video-card-thumb img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .video-card-thumb:hover img {
+      opacity: 0.98;
+    }
+    .play-btn-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(15, 118, 110, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.15s, background 0.15s;
+    }
+    .video-card-thumb:hover .play-btn-overlay {
+      transform: translate(-50%, -50%) scale(1.1);
+      background: #e8a33d;
+    }
+
+    /* Venn diagrams */
+    .venn-svg circle {
+      mix-blend-mode: multiply;
+      transition: fill 0.25s, opacity 0.25s;
+    }
+
+    /* Syntax highlight box */
+    .syntax-box {
+      background: #0f1c21;
+      color: #e6f1f5;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      border: 1px solid #23373f;
+    }
+    .syntax-box .kw-field { color: #f59e0b; font-weight: bold; }
+    .syntax-box .kw-op { color: #38bdf8; font-weight: bold; }
+    .syntax-box .kw-term { color: #86efac; }
+
+    /* Modals dialog */
+    dialog.dialog {
+      border: none;
+      border-radius: var(--radius);
+      padding: 0;
+      max-width: 680px;
+      width: 92%;
+      background: transparent;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+    dialog.dialog::backdrop {
+      background: rgba(16, 36, 43, 0.65);
+      backdrop-filter: blur(4px);
+    }
+    .modal-inner {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
+    }
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafb;
+    }
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+    }
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background: #f8fafb;
+    }
+
+    /* Print settings */
+    @media print {
+      .compact-nav, .opening-banner-actions, .custom-tabs-nav, .stepper-nav button, .btn {
+        display: none !important;
+      }
+      body {
+        background: #fff;
+        color: #000;
+        padding-bottom: 0;
+      }
+      .tab-content {
+        display: block !important;
+        margin-bottom: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FAIXA COMPACTA (SÓ APARECE APÓS A ROLAGEM ALÉM DO BANNER DE ABERTURA) -->
+  <nav class="compact-nav" id="compactNav" role="region" aria-label="Barra de navegação do recurso" aria-hidden="true">
+    <div class="shell-container compact-nav-inner">
+      <div class="compact-title-wrap">
+        <span class="compact-title compact-title-full">Pesquisa em Fisioterapia I — Guia de busca</span>
+        <span class="compact-title compact-title-short">Guia de busca em bases</span>
+        <button type="button" class="compact-section-badge" id="compactSectionTrigger" onclick="scrollAndOpenTabsMenu()" title="Seção ativa — Toque para navegar entre abas">
+          <span id="compactCurrentSectionName">1. Conceituação</span>
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+      </div>
+      <div class="compact-actions-wrap">
+        <div class="compact-prog-box" aria-label="Progresso do recurso">
+          <span class="text-xs font-semibold muted" id="compactProgLabel">Explorado: 0%</span>
+          <div class="compact-prog-bar-wrap" aria-hidden="true">
+            <div class="compact-prog-bar-fill" id="compactProgressBar"></div>
+          </div>
+        </div>
+        <div class="compact-btn-group" role="group" aria-label="Ações rápidas">
+          <button type="button" class="compact-btn compact-btn-lab" onclick="openLabModal()" aria-label="Abrir laboratório de busca" title="Abrir laboratório de busca">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+            <span class="compact-btn-label">Laboratório</span>
+          </button>
+          <button type="button" class="compact-btn compact-btn-quiz" onclick="openQuizModal()" aria-label="Abrir exercício" title="Abrir exercício">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+            <span class="compact-btn-label">Exercício</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="shell-container mt-4 mb-6">
+
+    <!-- ÚNICO BANNER DE ABERTURA (NO CORPO DA PÁGINA) -->
+    <section class="opening-banner mb-4" id="openingBanner" aria-label="Apresentação e autoria do recurso">
+      <div class="opening-banner-layout">
+        <div class="opening-banner-content">
+          <span class="badge" data-variant="outline" style="font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent);">Recurso Didático • Fisioterapia</span>
+          <h1 class="text-2xl font-bold m-0 mt-2" style="color: var(--text); line-height: 1.25; text-align: left;">Guia interativo de busca em bases de dados</h1>
+          <p class="text-base muted m-0 mt-1" style="text-align: left;">Da pergunta de pesquisa à estratégia de busca: conceitos, bases e prática</p>
+          <div class="mt-3 pt-3" style="border-top: 1px solid #c8ded8; text-align: left;">
+            <p class="text-sm font-bold m-0" style="color: var(--accent); text-align: left;">Andréa Soares Rocha da Silva</p>
+            <p class="text-xs muted m-0 mt-1" style="line-height: 1.5; text-align: left;">Recurso educacional desenvolvido para o módulo Pesquisa em Fisioterapia I do Curso de Graduação em Fisioterapia da Universidade Federal do Ceará (UFC).</p>
+            <p class="text-xs muted m-0 mt-0.5" style="text-align: left;">Grupo Educação, Tecnologia e Saúde (GETS).</p>
+          </div>
+        </div>
+
+        <div class="opening-banner-actions">
+          <div class="banner-prog-card">
+            <div class="row between mb-1">
+              <span class="text-xs font-semibold muted">Progresso</span>
+              <span class="text-xs font-bold" id="openingProgLabel" style="color: var(--accent);">Explorado: 0%</span>
+            </div>
+            <div class="progress-bar-wrap" style="height: 6px; border-radius: 999px;" aria-hidden="true">
+              <div class="progress-bar-fill" id="globalProgressBar"></div>
+            </div>
+          </div>
+          <div class="banner-action-buttons-row">
+            <button type="button" class="banner-action-btn banner-btn-lab" onclick="openLabModal()" aria-label="Abrir laboratório de busca">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+              <span class="btn-text-full">Laboratório de busca</span>
+              <span class="btn-text-short">Laboratório</span>
+            </button>
+            <button type="button" class="banner-action-btn banner-btn-quiz" onclick="openQuizModal()" aria-label="Abrir exercício">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+              <span>Exercício</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVEGAÇÃO DE ABAS RESPONSIVA (DESKTOP GRID / MOBILE DROPDOWN ACESSÍVEL) -->
+    <div class="nav-tabs-wrapper" id="navTabsWrapper">
+      <!-- Backdrop móvel para fechamento por toque fora -->
+      <div class="mobile-tab-backdrop" id="mobileTabBackdrop" aria-hidden="true"></div>
+
+      <!-- DESKTOP / TABLET (> 720px): Grid de 4 abas completas sem scroll -->
+      <nav class="custom-tabs-nav" role="tablist" aria-label="Seções do guia de busca">
+        <button class="tab-btn" role="tab" id="tab-btn-1" aria-controls="panel-1" aria-selected="true" data-tab-id="1">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <span>1. Conceituação</span>
+          <span class="tab-counter">1</span>
+        </button>
+        <button class="tab-btn" role="tab" id="tab-btn-2" aria-controls="panel-2" aria-selected="false" data-tab-id="2">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <span>2. PubMed</span>
+          <span class="tab-counter">2</span>
+        </button>
+        <button class="tab-btn" role="tab" id="tab-btn-3" aria-controls="panel-3" aria-selected="false" data-tab-id="3">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          <span>3. PEDro</span>
+          <span class="tab-counter">3</span>
+        </button>
+        <button class="tab-btn" role="tab" id="tab-btn-4" aria-controls="panel-4" aria-selected="false" data-tab-id="4">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+          <span>4. Cochrane</span>
+          <span class="tab-counter">4</span>
+        </button>
+      </nav>
+
+      <!-- CELULAR (<= 720px): Botão amplo com rótulo da seção atual + Menu Dropdown vertical -->
+      <div class="mobile-tab-nav" id="mobileTabNav">
+        <button type="button" class="mobile-tab-trigger" id="mobileTabTrigger" aria-expanded="false" aria-controls="mobileTabDropdown" aria-haspopup="menu">
+          <div class="mobile-tab-trigger-left">
+            <div class="mobile-tab-icon-box" id="mobileTabTriggerIcon" aria-hidden="true">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </div>
+            <div class="mobile-tab-trigger-text">
+              <span class="mobile-tab-prefix">Seção ativa (Toque para trocar)</span>
+              <span class="mobile-tab-current-label" id="mobileTabCurrentLabel">1. Conceituação</span>
+            </div>
+          </div>
+          <svg class="mobile-tab-chevron" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+
+        <!-- Menu vertical com as 4 opções completas sempre visíveis -->
+        <div class="mobile-tab-dropdown" id="mobileTabDropdown" role="menu" aria-labelledby="mobileTabTrigger">
+          <button type="button" class="mobile-tab-option is-active" role="menuitemradio" aria-checked="true" data-tab-id="1">
+            <div class="mobile-tab-option-left">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+              <span>1. Conceituação</span>
+            </div>
+            <span class="mobile-tab-opt-badge badge-done" id="tabStatus-1">Ativa ✓</span>
+          </button>
+          <button type="button" class="mobile-tab-option" role="menuitemradio" aria-checked="false" data-tab-id="2">
+            <div class="mobile-tab-option-left">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <span>2. PubMed</span>
+            </div>
+            <span class="mobile-tab-opt-badge badge-pending" id="tabStatus-2">Pendente</span>
+          </button>
+          <button type="button" class="mobile-tab-option" role="menuitemradio" aria-checked="false" data-tab-id="3">
+            <div class="mobile-tab-option-left">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+              <span>3. PEDro</span>
+            </div>
+            <span class="mobile-tab-opt-badge badge-pending" id="tabStatus-3">Pendente</span>
+          </button>
+          <button type="button" class="mobile-tab-option" role="menuitemradio" aria-checked="false" data-tab-id="4">
+            <div class="mobile-tab-option-left">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+              <span>4. Cochrane</span>
+            </div>
+            <span class="mobile-tab-opt-badge badge-pending" id="tabStatus-4">Pendente</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA 1: CONCEITUAÇÃO -->
+    <section class="tab-content is-active" id="panel-1" role="tabpanel" aria-labelledby="tab-btn-1">
+      
+      <!-- Cartão de abertura com tooltips -->
+      <div class="card mb-4" style="border-left: 5px solid var(--accent);">
+        <header>
+          <div class="row between">
+            <h2 class="text-xl font-bold m-0" style="color: var(--accent);">Prática Baseada em Evidências e as Bases Bibliográficas</h2>
+            <span class="badge" data-variant="secondary">Fundamentos</span>
+          </div>
+          <p class="muted mt-1 mb-0">Compreenda os pilares da busca sistemática em saúde antes de executar qualquer estratégia.</p>
+        </header>
+        <section class="mt-3">
+          <p class="text-base" style="line-height: 1.7;">
+            A Fisioterapia Baseada em Evidências integra o tripé clássico: a 
+            <span class="term-tip" tabindex="0">melhor evidência científica
+              <span class="tip-box">Dados empíricos obtidos através de métodos científicos rigorosos (ensaios clínicos, revisões sistemáticas) para reduzir vieses e incertezas.</span>
+            </span>, a 
+            <strong>experiência clínica</strong> do profissional e as 
+            <strong>preferências e valores do paciente</strong>.
+          </p>
+          <p class="text-base" style="line-height: 1.7;">
+            Para acessar essa literatura com rapidez e sem vieses de seleção, recorremos a uma 
+            <span class="term-tip" tabindex="0">base de dados
+              <span class="tip-box">Coleção organizada e estruturada de literatura científica eletrônica que permite consultas rápidas por meio de critérios lógicos.</span>
+            </span> bibliográfica. Ao ser incluído, cada artigo passa por um rigoroso processo de 
+            <span class="term-tip" tabindex="0">indexação
+              <span class="tip-box">Processo técnico em que especialistas analisam o artigo e atribuem palavras-chave controladas e códigos para facilitar sua recuperação.</span>
+            </span>, no qual são catalogados seus 
+            <span class="term-tip" tabindex="0">metadados
+              <span class="tip-box">Informações estruturadas sobre a publicação: autores, título, periódico, volume, ano, afiliação e resumo.</span>
+            </span> e seu 
+            <span class="term-tip" tabindex="0">descritor
+              <span class="tip-box">Termo padronizado pertencente a um vocabulário controlado (ex.: DeCS/MeSH) que sintetiza o assunto principal de um estudo.</span>
+            </span> temático. Nem todo registro dá acesso imediato ao 
+            <span class="term-tip" tabindex="0">texto completo
+              <span class="tip-box">Versão integral do estudo científico (artigo em PDF/HTML), diferentemente do registro referencial que exibe apenas o resumo.</span>
+            </span>, mas todos devem vir de periódicos com 
+            <span class="term-tip" tabindex="0">revisão por pares
+              <span class="tip-box">Avaliação crítica e anônima de manuscritos por outros pesquisadores independentes da área antes da publicação formal.</span>
+            </span>.
+          </p>
+        </section>
+      </div>
+
+      <!-- Grade de 4 Cartões Conceituais -->
+      <h3 class="text-lg font-bold mb-3" style="color: var(--text);">Quatro Pilares da Estrutura de Busca</h3>
+      <div class="cols-2 gap-4 mb-6">
+        
+        <!-- Cartão 1 -->
+        <div class="card">
+          <header class="row gap-2" style="align-items: center;">
+            <div style="background: #e6f4f2; color: var(--accent); padding: 8px; border-radius: 8px;">
+              <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
+            </div>
+            <div>
+              <h4 class="text-base font-bold m-0">Vocabulário Controlado x Linguagem Natural</h4>
+              <span class="text-xs muted">DeCS (BIREME/OPAS/OMS) e MeSH (NLM)</span>
+            </div>
+          </header>
+          <section class="text-sm mt-2">
+            <p><strong>Linguagem natural</strong> são palavras livres usadas pelo autor no título ou resumo. Sofre com variações gramaticais e sinônimos.</p>
+            <p><strong>Vocabulários controlados</strong> organizam conceitos em árvores hierárquicas. O 
+              <span class="term-tip" tabindex="0">MeSH
+                <span class="tip-box">Medical Subject Headings: vocabulário controlado e hierárquico mantido pela NLM (National Library of Medicine dos EUA) para padronizar e indexar tematicamente artigos no MEDLINE/PubMed.</span>
+              </span> é o vocabulário da NLM (em inglês), e o 
+              <span class="term-tip" tabindex="0">DeCS
+                <span class="tip-box">Descritores em Ciências da Saúde: vocabulário controlado e estruturado trilíngue (português, espanhol e inglês) criado pela BIREME/OPAS/OMS para indexar a literatura biomédica na América Latina.</span>
+              </span> é a versão adaptada para a América Latina.</p>
+            <p class="muted text-xs mb-0"><em>Benefício:</em> buscar por um descritor recupera estudos sobre aquele conceito mesmo se o autor utilizou outro sinônimo na escrita.</p>
+          </section>
+        </div>
+
+        <!-- Cartão 2 -->
+        <div class="card">
+          <header class="row gap-2" style="align-items: center;">
+            <div style="background: #fef3c7; color: var(--amber-dark); padding: 8px; border-radius: 8px;">
+              <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"></circle><circle cx="15" cy="12" r="6"></circle></svg>
+            </div>
+            <div>
+              <h4 class="text-base font-bold m-0">
+                <span class="term-tip" tabindex="0">Operadores Booleanos
+                  <span class="tip-box">Comandos lógicos fundamentados na álgebra booleana (AND, OR, NOT) que estabelecem relações matemáticas de interseção, união ou exclusão entre os conceitos pesquisados.</span>
+                </span>
+              </h4>
+              <span class="text-xs muted">AND • OR • NOT (lógica de conjuntos)</span>
+            </div>
+          </header>
+          <section class="text-sm mt-2">
+            <ul style="padding-left: 18px; margin: 0 0 8px 0;">
+              <li><strong>AND (interseção):</strong> Restringe a busca. Retorna apenas artigos que contenham ambos os conceitos simultaneamente.</li>
+              <li><strong>OR (união):</strong> Amplia a busca. Conecta sinônimos e grafias alternativas (ex.: <em>physiotherapy OR physical therapy</em>).</li>
+              <li><strong>NOT (exclusão):</strong> Elimina termos. <span class="text-danger font-semibold">Cuidado:</span> pode excluir sem querer artigos relevantes que comparavam os dois assuntos.</li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- Cartão 3 -->
+        <div class="card">
+          <header class="row gap-2" style="align-items: center;">
+            <div style="background: #e0f2fe; color: #0369a1; padding: 8px; border-radius: 8px;">
+              <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path></svg>
+            </div>
+            <div>
+              <h4 class="text-base font-bold m-0">Recursos de Sintaxe</h4>
+              <span class="text-xs muted">
+                <span class="term-tip" tabindex="0">Truncamento
+                  <span class="tip-box">Recurso de busca (geralmente o símbolo asterisco *) inserido na raiz lexical de uma palavra para recuperar simultaneamente todos os seus sufixos, derivados e plurais gramaticais.</span>
+                </span>, aspas e campos
+              </span>
+            </div>
+          </header>
+          <section class="text-sm mt-2">
+            <p><strong>Truncamento (*):</strong> <code>physiotherap*</code> recupera physiotherapy, physiotherapist, physiotherapeutic.</p>
+            <p><strong>Aspas (" "):</strong> Forçam a correspondência da expressão exata na mesma ordem: <code>"low back pain"</code>.</p>
+            <p><strong>Campos de busca:</strong> Delimitam onde a palavra deve estar, como em título/resumo ou descritor principal.</p>
+            <div class="alert text-xs mt-2" style="padding: 6px 10px;">
+              ⚠️ Truncamento e sintaxe variam entre as bases. Sempre consulte a seção Help da base utilizada!
+            </div>
+          </section>
+        </div>
+
+        <!-- Cartão 4 -->
+        <div class="card">
+          <header class="row gap-2" style="align-items: center;">
+            <div style="background: #f3e8ff; color: #7e22ce; padding: 8px; border-radius: 8px;">
+              <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+            </div>
+            <div>
+              <h4 class="text-base font-bold m-0">Filtros e Limites Metodológicos</h4>
+              <span class="text-xs muted">Refinamento seguro de resultados</span>
+            </div>
+          </header>
+          <section class="text-sm mt-2">
+            <p>Permitem calibrar a busca sem descaracterizar os termos de busca:</p>
+            <ul style="padding-left: 18px; margin: 0;">
+              <li><strong>Tipo de desenho:</strong> Ensaio Clínico Randomizado, Revisão Sistemática, Diretriz Clínica.</li>
+              <li><strong>Período temporal:</strong> Últimos 5 ou 10 anos (ou sem limite para revisões).</li>
+              <li><strong>População/Idade:</strong> Adultos, idosos, recém-nascidos.</li>
+              <li><strong>Espécie:</strong> Humanos (evita estudos puramente laboratoriais com animais).</li>
+            </ul>
+          </section>
+        </div>
+
+      </div>
+
+      <!-- SIMULADOR 1: CONSTRUTOR PICO -->
+      <div class="card mb-6" style="border: 2px solid #bbf7d0; background: #fafdfb;">
+        <header>
+          <div class="row between">
+            <div>
+              <span class="badge" data-variant="outline" style="color: #15803d; border-color: #86efac;">Simulador Interativo 1</span>
+              <h3 class="text-lg font-bold m-0 mt-1">Construtor de Estratégia PICO</h3>
+            </div>
+            <button class="btn" data-variant="secondary" data-size="sm" id="btnFillPicoExample">Preencher com Exemplo Clínico</button>
+          </div>
+          <p class="muted text-sm mt-1">Estruture a pergunta de pesquisa clínica e veja a combinação conceitual gerada em tempo real.</p>
+        </header>
+        <section class="mt-3">
+          <div class="shell-grid cols-2 gap-3">
+            <div class="field">
+              <label for="picoP" class="font-semibold text-xs"><span style="color: #b91c1c;">[P]</span> População / Problema</label>
+              <input class="input" id="picoP" placeholder="ex.: Idosos com osteoartrite de joelho">
+            </div>
+            <div class="field">
+              <label for="picoI" class="font-semibold text-xs"><span style="color: #0284c7;">[I]</span> Intervenção / Terapia</label>
+              <input class="input" id="picoI" placeholder="ex.: Exercício resistido ou hidroterapia">
+            </div>
+            <div class="field">
+              <label for="picoC" class="font-semibold text-xs"><span style="color: #d97706;">[C]</span> Comparação / Controle (opcional)</label>
+              <input class="input" id="picoC" placeholder="ex.: Cuidados habituais ou grupo controle">
+            </div>
+            <div class="field">
+              <label for="picoO" class="font-semibold text-xs"><span style="color: #16a34a;">[O]</span> Desfecho / Resultado Clínico</label>
+              <input class="input" id="picoO" placeholder="ex.: Alívio da dor e funcionalidade">
+            </div>
+          </div>
+          <div class="field mt-3">
+            <label for="picoT" class="font-semibold text-xs muted">[T] Tipo de Estudo (opcional para busca avançada)</label>
+            <input class="input" id="picoT" placeholder="ex.: Ensaio clínico randomizado">
+          </div>
+
+          <div class="panel p-3 mt-4" style="background: #ffffff; border: 1px solid var(--border);">
+            <div class="row between mb-2">
+              <span class="text-xs font-bold muted" style="text-transform: uppercase;">Pergunta Clínica Formulada:</span>
+              <button class="btn" data-variant="ghost" data-size="sm" id="btnCopyPico">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                Copiar Pergunta e Conceitos
+              </button>
+            </div>
+            <p id="picoQuestionResult" class="text-base font-medium m-0" style="color: var(--accent); min-height: 24px;">Preencha os campos acima para ver a pergunta formulada.</p>
+            
+            <div class="mt-3 pt-3" style="border-top: 1px dashed var(--border);">
+              <span class="text-xs font-bold muted">Bloco Lógico Conceitual:</span>
+              <div id="picoBlockResult" class="mono text-xs mt-1 p-2" style="background: #f1f5f9; border-radius: 6px;">
+                (Conceito P) AND (Conceito I) AND (Conceito O)
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- SIMULADOR 2: MÁQUINA BOOLEANA -->
+      <div class="card mb-6" style="border: 2px solid #fed7aa; background: #fffdfa;">
+        <header>
+          <span class="badge" data-variant="outline" style="color: #c2410c; border-color: #fdba74;">Simulador Interativo 2</span>
+          <h3 class="text-lg font-bold m-0 mt-1">Máquina Booleana Interativa (Diagrama de Venn)</h3>
+          <p class="muted text-sm mt-1">Alterne entre AND, OR e NOT para entender visualmente a matemática dos conjuntos de busca.</p>
+        </header>
+        <section class="mt-3">
+          <div class="shell-grid cols-2 gap-3">
+            <div class="field">
+              <label for="boolTermA" class="font-semibold text-xs">Termo A (Conjunto Azul)</label>
+              <input class="input" id="boolTermA" value="dor lombar">
+            </div>
+            <div class="field">
+              <label for="boolTermB" class="font-semibold text-xs">Termo B (Conjunto Laranja)</label>
+              <input class="input" id="boolTermB" value="exercício terapêutico">
+            </div>
+          </div>
+
+          <div class="row gap-2 mt-3" style="justify-content: center;">
+            <button class="btn" id="btnOpAnd" data-size="sm" data-variant="primary">Operador AND (Interseção)</button>
+            <button class="btn" id="btnOpOr" data-size="sm" data-variant="outline">Operador OR (União)</button>
+            <button class="btn" id="btnOpNot" data-size="sm" data-variant="outline">Operador NOT (Exclusão)</button>
+          </div>
+
+          <div class="panel p-3 mt-4" style="background: #ffffff; text-align: center;">
+            <div class="syntax-box text-center mb-3" id="boolStringOutput">
+              "dor lombar" <span class="kw-op">AND</span> "exercício terapêutico"
+            </div>
+
+            <!-- SVG Venn Diagram -->
+            <div style="display: flex; justify-content: center;">
+              <svg class="venn-svg" width="280" height="150" viewBox="0 0 280 150">
+                <defs>
+                  <mask id="vennMaskAOnly">
+                    <rect width="280" height="150" fill="white" />
+                    <circle cx="170" cy="75" r="55" fill="black" />
+                  </mask>
+                  <mask id="vennMaskBOnly">
+                    <rect width="280" height="150" fill="white" />
+                    <circle cx="110" cy="75" r="55" fill="black" />
+                  </mask>
+                </defs>
+                <!-- Base outline circles -->
+                <circle cx="110" cy="75" r="55" fill="none" stroke="#0284c7" stroke-width="2" />
+                <circle cx="170" cy="75" r="55" fill="none" stroke="#ea580c" stroke-width="2" />
+
+                <!-- Shaded regions dynamically toggled via opacity -->
+                <!-- A only -->
+                <circle id="vennRegionAOnly" cx="110" cy="75" r="55" fill="#38bdf8" mask="url(#vennMaskAOnly)" opacity="0" />
+                <!-- B only -->
+                <circle id="vennRegionBOnly" cx="170" cy="75" r="55" fill="#fb923c" mask="url(#vennMaskBOnly)" opacity="0" />
+                <!-- Intersection -->
+                <g id="vennIntersection" opacity="1">
+                  <circle cx="110" cy="75" r="55" fill="#0f766e" clip-path="url(#clipRight)" />
+                  <clipPath id="clipRight">
+                    <circle cx="170" cy="75" r="55" />
+                  </clipPath>
+                </g>
+
+                <!-- Labels -->
+                <text x="75" y="80" fill="#0369a1" font-size="12" font-weight="bold" text-anchor="middle">A</text>
+                <text x="205" y="80" fill="#c2410c" font-size="12" font-weight="bold" text-anchor="middle">B</text>
+                <text x="140" y="80" id="vennCenterLabel" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">A ∩ B</text>
+              </svg>
+            </div>
+            
+            <p id="boolExplanation" class="text-sm font-semibold mt-2 mb-0" style="color: var(--accent);">
+              AND restringe: recupera apenas os artigos que contêm simultaneamente "dor lombar" E "exercício terapêutico".
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <!-- ACORDEÕES CONCEITUAIS -->
+      <h3 class="text-lg font-bold mb-3">Boas Práticas e Tomada de Decisão</h3>
+      <div class="accordion mb-6">
+        <details>
+          <summary class="font-semibold">Como escolher onde buscar?</summary>
+          <div class="p-3 text-sm">
+            <p>A escolha depende do tipo de pergunta clínica e do desenho de estudo almejado:</p>
+            <ul>
+              <li><strong>Intervenção fisioterapêutica pura:</strong> Comece pela <strong>PEDro</strong> (focada e com pontuação metodológica rápida).</li>
+              <li><strong>Revisões de alta confiabilidade e ensaios não indexados:</strong> Consulte a <strong>Cochrane Library</strong> (CDSR e CENTRAL).</li>
+              <li><strong>Visão biomédica ampla, mecanismos, prognóstico e diagnóstico:</strong> Utilize a <strong>PubMed</strong> (MEDLINE).</li>
+              <li>Em revisões sistemáticas, a recomendação internacional (PRISMA) é buscar em <strong>múltiplas bases</strong> de dados para evitar viés de indexação.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary class="font-semibold">Do tema geral à pergunta clínica estruturada</summary>
+          <div class="p-3 text-sm">
+            <p>Temas genéricos como <em>"Fisioterapia na dor lombar"</em> geram dezenas de milhares de resultados dispersos. Estruturar em PICO delimita:</p>
+            <ul>
+              <li>Quem é o paciente específico? (ex.: idoso com osteoartrite, atleta com lesão de LCA).</li>
+              <li>Qual é o recurso terapêutico preciso? (ex.: pilates, cinesioterapia motora, eletroterapia).</li>
+              <li>Qual desfecho clínico é mensurável? (ex.: escala EVA de dor, questionário Roland-Morris).</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary class="font-semibold">Por que registrar detalhadamente a estratégia de busca? (Reprodutibilidade)</summary>
+          <div class="p-3 text-sm">
+            <p>A ciência exige <strong>reprodutibilidade e transparência</strong>. Anotar a data da consulta, os termos exatos, os campos e os limites permite que outro fisioterapeuta ou pesquisador repita o procedimento e chegue exatamente ao mesmo conjunto de evidências.</p>
+          </div>
+        </details>
+        <details>
+          <summary class="font-semibold">Erros comuns cometidos por iniciantes</summary>
+          <div class="p-3 text-sm">
+            <ul>
+              <li><strong>Buscar apenas em português:</strong> Mais de 90% da literatura científica de alto impacto na saúde está indexada em inglês.</li>
+              <li><strong>Ignorar sinônimos:</strong> Pesquisar apenas <em>physiotherapy</em> e perder artigos que usaram <em>physical therapy</em> ou <em>exercise therapy</em>.</li>
+              <li><strong>Uso indiscriminado do NOT:</strong> Excluir um termo que o autor citou apenas na introdução ou discussão comparativa.</li>
+              <li><strong>Confundir quantidade com qualidade:</strong> 10 artigos metodologicamente robustos e sem viés valem mais que 200 artigos sem rigor científico.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <!-- VÍDEOS PARA REVISÃO -->
+      <h3 class="text-lg font-bold mb-3">Vídeos para Revisão Inicial</h3>
+      <div class="cols-2 gap-4 mb-4">
+        
+        <!-- Video 1 -->
+        <div class="card p-3">
+          <div class="video-card-thumb" id="video-wrap-7N8L8ije53Y" onclick="loadLazyVideo('7N8L8ije53Y', 'video-wrap-7N8L8ije53Y')">
+            <img src="https://img.youtube.com/vi/7N8L8ije53Y/hqdefault.jpg" alt="Miniatura do vídeo GETS UFC Bases de Dados" loading="lazy">
+            <div class="play-btn-overlay" title="Clique para assistir">
+              <svg width="24" height="24" fill="#ffffff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <h4 class="text-sm font-bold mt-2 mb-1">GETS UFC — O que são as bases de dados?</h4>
+          <p class="text-xs muted mb-2">Visão geral sobre indexação e organização da informação científica em saúde.</p>
+          <a class="btn" data-variant="link" data-size="sm" href="https://www.youtube.com/watch?v=7N8L8ije53Y" target="_blank" rel="noopener">Abrir no YouTube ↗</a>
+        </div>
+
+        <!-- Video 2 -->
+        <div class="card p-3">
+          <div class="video-card-thumb" id="video-wrap-1lZfaBhikcA" onclick="loadLazyVideo('1lZfaBhikcA', 'video-wrap-1lZfaBhikcA')">
+            <img src="https://img.youtube.com/vi/1lZfaBhikcA/hqdefault.jpg" alt="Miniatura do vídeo GETS UFC DeCS e Booleanos" loading="lazy">
+            <div class="play-btn-overlay" title="Clique para assistir">
+              <svg width="24" height="24" fill="#ffffff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <h4 class="text-sm font-bold mt-2 mb-1">GETS UFC — Como usar o DeCS e os operadores booleanos</h4>
+          <p class="text-xs muted mb-2">Construção prática com descritores da BIREME e combinação lógica.</p>
+          <a class="btn" data-variant="link" data-size="sm" href="https://www.youtube.com/watch?v=1lZfaBhikcA" target="_blank" rel="noopener">Abrir no YouTube ↗</a>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ABA 2: PUBMED -->
+    <section class="tab-content" id="panel-2" role="tabpanel" aria-labelledby="tab-btn-2">
+      
+      <!-- Cartão introdutório -->
+      <div class="card mb-4" style="border-left: 5px solid #0284c7;">
+        <header>
+          <div class="row between">
+            <div>
+              <span class="badge" data-variant="outline" style="color: #0369a1; border-color: #7dd3fc;">Base Biomédica Principal</span>
+              <h2 class="text-xl font-bold m-0 mt-1">PubMed (National Library of Medicine - NLM)</h2>
+            </div>
+            <a href="https://pubmed.ncbi.nlm.nih.gov" target="_blank" rel="noopener" class="btn" data-variant="outline" data-size="sm">Acessar PubMed ↗</a>
+          </div>
+          <p class="muted mt-2 mb-0">
+            A PubMed é mantida pelo <em>National Center for Biotechnology Information</em> (NCBI) na Biblioteca Nacional de Medicina dos EUA. Com acesso totalmente livre, indexa mais de 36 milhões de citações provenientes do <strong>MEDLINE</strong>, <strong>PubMed Central (PMC)</strong> e <strong>Bookshelf</strong>.
+          </p>
+        </header>
+      </div>
+
+      <!-- STEPPER PUBMED -->
+      <h3 class="text-lg font-bold mb-3">Passo a Passo da Busca no PubMed</h3>
+      <div class="card mb-6">
+        <div class="stepper-nav" id="stepperNavPubmed">
+          <div class="step-pill is-active" data-step="0">1. PICO & Conceitos</div>
+          <div class="step-pill" data-step="1">2. MeSH & Livres</div>
+          <div class="step-pill" data-step="2">3. OR & AND</div>
+          <div class="step-pill" data-step="3">4. Truncamento</div>
+          <div class="step-pill" data-step="4">5. Filtros</div>
+          <div class="step-pill" data-step="5">6. Revisão</div>
+        </div>
+
+        <div class="panel p-4" id="stepperContentPubmed" style="min-height: 120px;">
+          <!-- Injetado por JS -->
+        </div>
+
+        <div class="row between p-3" style="border-top: 1px solid var(--border);">
+          <button class="btn" data-variant="secondary" data-size="sm" id="btnPrevPubmed" disabled>← Etapa Anterior</button>
+          <span class="text-xs muted" id="stepIndicatorPubmed">Etapa 1 de 6</span>
+          <button class="btn" data-variant="primary" data-size="sm" id="btnNextPubmed">Próxima Etapa →</button>
+        </div>
+      </div>
+
+      <!-- QUADRO DE SINTAXE PUBMED COM TOOLTIPS -->
+      <h3 class="text-lg font-bold mb-3">Quadro de Sintaxe e Exemplos Reais</h3>
+      <div class="card mb-6">
+        <p class="text-sm muted mb-2">Exemplo de string estruturada para Ensaio Clínico em Dor Lombar na Fisioterapia:</p>
+        <div class="syntax-box">
+          (<span class="kw-term">"low back pain"</span><span class="kw-field">[tiab]</span> <span class="kw-op">OR</span> <span class="kw-term">"low back pain"</span><span class="kw-field">[MeSH Terms]</span>) <span class="kw-op">AND</span> (<span class="kw-term">exercise</span><span class="kw-field">[tiab]</span> <span class="kw-op">OR</span> <span class="kw-term">"exercise therapy"</span><span class="kw-field">[MeSH Terms]</span>)
+        </div>
+        <div class="cols-3 gap-3 mt-3 text-xs">
+          <div class="p-2" style="background: #f8fafc; border-radius: 6px; border: 1px solid var(--border);">
+            <strong style="color: #f59e0b;">
+              <span class="term-tip" tabindex="0">[tiab]
+                <span class="tip-box">Tag de campo no PubMed que restringe a busca estritamente aos campos Title (Título) e Abstract (Resumo) do artigo, evitando falsos positivos do corpo do texto.</span>
+              </span>
+            </strong>
+            <p class="m-0 mt-1">Busca a ocorrência exata das palavras especificamente no <strong>Título (Title)</strong> ou no <strong>Resumo (Abstract)</strong>.</p>
+          </div>
+          <div class="p-2" style="background: #f8fafc; border-radius: 6px; border: 1px solid var(--border);">
+            <strong style="color: #f59e0b;">
+              <span class="term-tip" tabindex="0">[MeSH Terms]
+                <span class="tip-box">Tag que busca descritores controlados oficiais da NLM, ativando automaticamente a inclusão de termos hierarquicamente subordinados (explosão do MeSH).</span>
+              </span>
+            </strong>
+            <p class="m-0 mt-1">Aciona o descritor controlado atribuído pelos indexadores da NLM, explodindo a árvore hierárquica.</p>
+          </div>
+          <div class="p-2" style="background: #f8fafc; border-radius: 6px; border: 1px solid var(--border);">
+            <strong style="color: #f59e0b;">
+              <span class="term-tip" tabindex="0">[tw]
+                <span class="tip-box">Text Word: tag de campo abrangente no PubMed que pesquisa o termo em título, resumo, palavras-chave adicionadas pelo autor e afiliação institucional.</span>
+              </span> (Text Word)
+            </strong>
+            <p class="m-0 mt-1">Busca aberta que varre título, resumo, palavras-chave do autor e afiliação institucional.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACORDEÕES PUBMED -->
+      <h3 class="text-lg font-bold mb-3">Recursos Avançados e Peculiaridades da PubMed</h3>
+      <div class="accordion mb-6">
+        <details>
+          <summary class="font-semibold">Mapeamento Automático de Termos (ATM - Automatic Term Mapping)</summary>
+          <div class="p-3 text-sm">
+            <p>Quando você digita palavras livres sem aspas e sem tags de campo, a PubMed tenta automaticamente correlacionar seu termo a uma lista MeSH, a um periódico ou a uma lista de autores. <strong>Atenção:</strong> colocar aspas ou truncamento (*) desativa o ATM, forçando a busca literal.</p>
+          </div>
+        </details>
+        <details>
+          <summary class="font-semibold">Advanced Search (Busca Avançada) e Histórico de Pesquisa</summary>
+          <div class="p-3 text-sm">
+            <p>A página <em>Advanced Search</em> do PubMed armazena seu <strong>Search History</strong> com números de busca (#1, #2, etc.). Isso permite montar linhas separadas para cada braço da pergunta (ex.: #1 para População, #2 para Intervenção) e depois combiná-las como <code>#1 AND #2</code>.</p>
+          </div>
+        </details>
+        <details>
+          <summary class="font-semibold">Recursos Úteis: Similar articles, Cited by, Clipboard e Alertas</summary>
+          <div class="p-3 text-sm">
+            <ul>
+              <li><strong>Similar articles:</strong> Algoritmo de relevância que encontra artigos conceitualmente parecidos.</li>
+              <li><strong>Cited by:</strong> Mostra estudos mais recentes que citaram aquele artigo (busca prospectiva).</li>
+              <li><strong>Clipboard:</strong> Área de transferência temporária para guardar artigos selecionados durante a sessão.</li>
+              <li><strong>Create alert / Send to:</strong> Permite salvar buscas e receber atualizações semanais por e-mail ou exportar arquivos para gerenciadores (ex.: Zotero, Mendeley).</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <!-- VÍDEOS PUBMED -->
+      <h3 class="text-lg font-bold mb-3">Videoaulas Recomendadas: PubMed</h3>
+      <div class="cols-2 gap-4 mb-6">
+        <div class="card p-3">
+          <div class="video-card-thumb" id="video-wrap-WZ1jBzidHp8" onclick="loadLazyVideo('WZ1jBzidHp8', 'video-wrap-WZ1jBzidHp8')">
+            <img src="https://img.youtube.com/vi/WZ1jBzidHp8/hqdefault.jpg" alt="GETS UFC Como pesquisar no PubMed" loading="lazy">
+            <div class="play-btn-overlay">
+              <svg width="24" height="24" fill="#ffffff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <h4 class="text-sm font-bold mt-2 mb-1">GETS UFC — Como pesquisar na PUBMED</h4>
+          <p class="text-xs muted mb-2">Tutorial focado na interface moderna, aplicação de filtros e operadores.</p>
+          <a class="btn" data-variant="link" data-size="sm" href="https://www.youtube.com/watch?v=WZ1jBzidHp8" target="_blank" rel="noopener">Abrir no YouTube ↗</a>
+        </div>
+
+        <div class="card p-3">
+          <div class="video-card-thumb" id="video-wrap-playlist-nlm" onclick="loadLazyPlaylist('PL7dF9e2qSW0YkmxDTsUG6p4hJjYOPT0Uj', 'video-wrap-playlist-nlm')">
+            <img src="https://img.youtube.com/vi/WZ1jBzidHp8/hqdefault.jpg" style="filter: hue-rotate(90deg);" alt="NLM PubMed Tutorials Playlist" loading="lazy">
+            <div class="play-btn-overlay">
+              <svg width="24" height="24" fill="#ffffff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <h4 class="text-sm font-bold mt-2 mb-1">National Library of Medicine — Tutorials: PubMed (Playlist Oficial)</h4>
+          <p class="text-xs muted mb-2">Série completa em inglês com lições curtas de busca avançada pela própria NLM.</p>
+          <a class="btn" data-variant="link" data-size="sm" href="https://www.youtube.com/playlist?list=PL7dF9e2qSW0YkmxDTsUG6p4hJjYOPT0Uj" target="_blank" rel="noopener">Abrir Playlist no YouTube ↗</a>
+        </div>
+      </div>
+
+      <div class="panel p-4 text-center" style="background: #eef7f6; border: 1px dashed var(--accent);">
+        <h4 class="text-base font-bold m-0" style="color: var(--accent);">Pronto para montar sua string PubMed?</h4>
+        <p class="text-sm muted mt-1 mb-3">Teste seus conceitos no nosso simulador dedicado com sintaxe de campos automáticos.</p>
+        <button class="btn" onclick="openLabModal('pubmed')">Abrir Laboratório de busca com sintaxe PubMed</button>
+      </div>
+
+    </section>
+
+    <!-- ABA 3: PEDRO -->
+    <section class="tab-content" id="panel-3" role="tabpanel" aria-labelledby="tab-btn-3">
+      
+      <!-- Cartão introdutório -->
+      <div class="card mb-4" style="border-left: 5px solid #0f766e;">
+        <header>
+          <div class="row between">
+            <div>
+              <span class="badge" data-variant="outline" style="color: var(--accent); border-color: #5eead4;">Base Específica da Fisioterapia</span>
+              <h2 class="text-xl font-bold m-0 mt-1">PEDro (Physiotherapy Evidence Database)</h2>
+            </div>
+            <a href="https://pedro.org.au" target="_blank" rel="noopener" class="btn" data-variant="outline" data-size="sm">Acessar PEDro ↗</a>
+          </div>
+          <p class="muted mt-2 mb-0">
+            Criada e mantida pelo <em>Institute for Musculoskeletal Health</em> (Universidade de Sydney), a PEDro é a base de dados global dedicada exclusivamente à evidência científica em Fisioterapia. Indexa <strong>ensaios clínicos controlados randomizados</strong>, <strong>revisões sistemáticas</strong> e <strong>diretrizes de prática clínica</strong>.
+          </p>
+        </header>
+        <section class="mt-3">
+          <div class="panel p-3" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
+            <div class="row gap-2" style="align-items: flex-start;">
+              <span style="font-size: 1.3rem;">⚖️</span>
+              <div>
+                <strong class="text-sm" style="color: #166534;">
+                  O que é a 
+                  <span class="term-tip" tabindex="0">Escala PEDro
+                    <span class="tip-box">Instrumento de 11 critérios (10 pontuáveis de 0 a 10) que avalia a validade interna do ensaio clínico e a presença de dados estatísticos suficientes para interpretação.</span>
+                  </span>?
+                </strong>
+                <p class="text-xs muted m-0 mt-1" style="line-height: 1.5;">
+                  A escala avalia critérios como alocação aleatória, sigilo de alocação, cegamento e análise por intenção de tratar. <em>Importante:</em> ela pontua a <strong>qualidade metodológica</strong> do ensaio, e NÃO mede o tamanho do efeito nem a qualidade da redação do artigo!
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- STEPPER PEDRO -->
+      <h3 class="text-lg font-bold mb-3">Passo a Passo da Busca na PEDro</h3>
+      <div class="card mb-6">
+        <div class="stepper-nav" id="stepperNavPedro">
+          <div class="step-pill is-active" data-step="0">1. Pergunta</div>
+          <div class="step-pill" data-step="1">2. Termos em Inglês</div>
+          <div class="step-pill" data-step="2">3. Distribuição nos Campos</div>
+          <div class="step-pill" data-step="3">4. OR no Campo</div>
+          <div class="step-pill" data-step="4">5. Filtros Clínicos</div>
+          <div class="step-pill" data-step="5">6. Refino</div>
+        </div>
+
+        <div class="panel p-4" id="stepperContentPedro" style="min-height: 120px;">
+          <!-- Injetado por JS -->
+        </div>
+
+        <div class="row between p-3" style="border-top: 1px solid var(--border);">
+          <button class="btn" data-variant="secondary" data-size="sm" id="btnPrevPedro" disabled>← Etapa Anterior</button>
+          <span class="text-xs muted" id="stepIndicatorPedro">Etapa 1 de 6</span>
+          <button class="btn" data-variant="primary" data-size="sm" id="btnNextPedro">Próxima Etapa →</button>
+        </div>
+      </div>
+
+      <!-- ACORDEÕES PEDRO -->
+      <h3 class="text-lg font-bold mb-3">Peculiaridades da Busca na PEDro</h3>
+      <div class="accordion mb-6">
+        <details>
+          <summary class="font-semibold">Busca Simples (Simple Search) vs. Busca Avançada (Advanced Search)</summary>
+          <div class="p-3 text-sm">
+            <p>A busca simples é ótima para iniciantes, mas para estudos aprofundados utilize a <strong>Advanced Search</strong>. Ela possui campos especializados: <em>Abstract & Title</em>, <em>Therapy</em>, <em>Problem</em>, <em>Body Part</em>, <em>Subdiscipline</em> e <em>Method</em>.</p>
+          </div>
+        </details>
+        <details>
+          <summary class="font-semibold">Uso do Vocabulário/Thesaurus da PEDro</summary>
+          <div class="p-3 text-sm">
+            <p>A base possui listas pré-definidas em caixas de seleção (dropdowns), como áreas clínicas (neurologia, cardiorrespiratória, ortopedia) e intervenções (hidroterapia, eletroterapia, treinamento de força). Usar essas opções pré-formatadas reduz erros de digitação.</p>
+          </div>
+        </details>
+        <details>
+          <summary class="font-semibold">Como interpretar a pontuação (Score 0 a 10)</summary>
+          <div class="p-3 text-sm">
+            <p>Ensaios com escore ≥ 6/10 são comumente considerados de <strong>moderada a alta qualidade metodológica</strong>. Ensaios com pontuação ≤ 5/10 apresentam maior risco de viés e devem ser interpretados com cautela clínica.</p>
+          </div>
+        </details>
+        <details>
+          <summary class="font-semibold">Cuidados essenciais ao traduzir termos para o inglês</summary>
+          <div class="p-3 text-sm">
+            <p>Apesar de o site da PEDro possuir interface traduzida em português, <strong>a indexação dos artigos é 100% em inglês</strong>. Pesquisar "dor lombar" retornará zero ou pouquíssimos resultados; digite sempre <code>low back pain</code>.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- VÍDEOS PEDRO (5 CARDS) -->
+      <h3 class="text-lg font-bold mb-3">Videoteca Oficial PEDro (Tutoriais em Português)</h3>
+      <div class="shell-grid cols-3 gap-3 mb-6">
+        
+        <div class="card p-3">
+          <div class="video-card-thumb" id="video-wrap-1pVbstrF7Fk" onclick="loadLazyVideo('1pVbstrF7Fk', 'video-wrap-1pVbstrF7Fk')">
+            <img src="https://img.youtube.com/vi/1pVbstrF7Fk/hqdefault.jpg" alt="PEDro Simple Search" loading="lazy">
+            <div class="play-btn-overlay"><svg width="22" height="22" fill="#ffffff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <h4 class="text-xs font-bold mt-2 mb-1">1. Simple search (Português)</h4>
+          <a class="btn" data-variant="link" data-size="sm" href="https://www.youtube.com/watch?v=1pVbstrF7Fk&t=3s" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+        </div>
+
+        <div class="card p-3">
+          <div class="video-card-thumb" id="video-wrap-cMUtkXVNNv0" onclick="loadLazyVideo('cMUtkXVNNv0', 'video-wrap-cMUtkXVNNv0')">
+            <img src="https://img.youtube.com/vi/cMUtkXVNNv0/hqdefault.jpg" alt="PEDro Advanced Search" loading="lazy">
+            <div class="play-btn-overlay"><svg width="22" height="22" fill="#ffffff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <h4 class="text-xs font-bold mt-2 mb-1">2. Advanced Search (Busca Avançada)</h4>
+          <a class="btn" data-variant="link" data-size="sm" href="https://www.youtube.com/watch?v=cMUtkXVNNv0" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+        </div>
+
+        <div class="card p-3">
+          <div class="video-card-thumb" id="video-wrap-h0461BVQ7VE" onclick="loadLazyVideo('h0461BVQ7VE', 'video-wrap-h0461BVQ7VE')">
+            <img src="https://img.youtube.com/vi/h0461BVQ7VE/hqdefault.jpg" alt="PEDro Answers 01" loading="lazy">
+            <div class="play-btn-overlay"><svg width="22" height="22" fill="#ffffff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <h4 class="text-xs font-bold mt-2 mb-1">3. You Ask #PEDroAnswers Vídeo 01</h4>
+          <a class="btn" data-variant="link" data-size="sm" href="https://www.youtube.com/watch?v=h0461BVQ7VE" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+        </div>
+
+        <div class="card p-3">
+          <div class="video-card-thumb" id="video-wrap-l0bnTsp98u0" onclick="loadLazyVideo('l0bnTsp98u0', 'video-wrap-l0bnTsp98u0')">
+            <img src="https://img.youtube.com/vi/l0bnTsp98u0/hqdefault.jpg" alt="PEDro Answers 02" loading="lazy">
+            <div class="play-btn-overlay"><svg width="22" height="22" fill="#ffffff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <h4 class="text-xs font-bold mt-2 mb-1">4. You Ask #PEDroAnswers Vídeo 02</h4>
+          <a class="btn" data-variant="link" data-size="sm" href="https://www.youtube.com/watch?v=l0bnTsp98u0" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+        </div>
+
+        <div class="card p-3">
+          <div class="video-card-thumb" id="video-wrap-oyK1UmOPjYg" onclick="loadLazyVideo('oyK1UmOPjYg', 'video-wrap-oyK1UmOPjYg')">
+            <img src="https://img.youtube.com/vi/oyK1UmOPjYg/hqdefault.jpg" alt="PEDro Answers 03" loading="lazy">
+            <div class="play-btn-overlay"><svg width="22" height="22" fill="#ffffff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <h4 class="text-xs font-bold mt-2 mb-1">5. You Ask #PEDroAnswers Vídeo 03</h4>
+          <a class="btn" data-variant="link" data-size="sm" href="https://www.youtube.com/watch?v=oyK1UmOPjYg" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+        </div>
+
+      </div>
+
+      <div class="panel p-4 text-center" style="background: #eef7f6; border: 1px dashed var(--accent);">
+        <h4 class="text-base font-bold m-0" style="color: var(--accent);">Preparando sua estratégia para a PEDro?</h4>
+        <p class="text-sm muted mt-1 mb-3">Veja como estruturar os termos por campos especializados no nosso laboratório interativo.</p>
+        <button class="btn" onclick="openLabModal('pedro')">Abrir Laboratório de busca com sintaxe PEDro</button>
+      </div>
+
+    </section>
+
+    <!-- ABA 4: COCHRANE -->
+    <section class="tab-content" id="panel-4" role="tabpanel" aria-labelledby="tab-btn-4">
+      
+      <!-- Cartão introdutório -->
+      <div class="card mb-4" style="border-left: 5px solid #d97706;">
+        <header>
+          <div class="row between">
+            <div>
+              <span class="badge" data-variant="outline" style="color: #b45309; border-color: #fcd34d;">Padrão-Ouro em Síntese de Evidências</span>
+              <h2 class="text-xl font-bold m-0 mt-1">Cochrane Library & CENTRAL</h2>
+            </div>
+            <a href="https://www.cochranelibrary.com" target="_blank" rel="noopener" class="btn" data-variant="outline" data-size="sm">Acessar Cochrane ↗</a>
+          </div>
+          <p class="muted mt-2 mb-0">
+            A Cochrane Library reúne a <strong>Cochrane Database of Systematic Reviews (CDSR)</strong> e o 
+            <span class="term-tip" tabindex="0">CENTRAL
+              <span class="tip-box">Cochrane Central Register of Controlled Trials: maior repositório global de ensaios clínicos controlados e randomizados, reunindo publicações do MEDLINE, Embase, outras bases e buscas manuais.</span>
+            </span> (Cochrane Central Register of Controlled Trials). O CENTRAL é o maior banco do mundo dedicado a ensaios clínicos, reunindo estudos recuperados em várias bases internacionais e buscas manuais, inclusive os não indexados no MEDLINE.
+          </p>
+        </header>
+      </div>
+
+      <!-- STEPPER COCHRANE -->
+      <h3 class="text-lg font-bold mb-3">Passo a Passo da Busca no Cochrane Library</h3>
+      <div class="card mb-6">
+        <div class="stepper-nav" id="stepperNavCochrane">
+          <div class="step-pill is-active" data-step="0">1. Escolha da Base</div>
+          <div class="step-pill" data-step="1">2. Linhas de Busca (#)</div>
+          <div class="step-pill" data-step="2">3. OR e AND</div>
+          <div class="step-pill" data-step="3">4. MeSH Cochrane</div>
+          <div class="step-pill" data-step="4">5. Limites</div>
+          <div class="step-pill" data-step="5">6. Exportação</div>
+        </div>
+
+        <div class="panel p-4" id="stepperContentCochrane" style="min-height: 120px;">
+          <!-- Injetado por JS -->
+        </div>
+
+        <div class="row between p-3" style="border-top: 1px solid var(--border);">
+          <button class="btn" data-variant="secondary" data-size="sm" id="btnPrevCochrane" disabled>← Etapa Anterior</button>
+          <span class="text-xs muted" id="stepIndicatorCochrane">Etapa 1 de 6</span>
+          <button class="btn" data-variant="primary" data-size="sm" id="btnNextCochrane">Próxima Etapa →</button>
+        </div>
+      </div>
+
+      <!-- ACORDEÕES COCHRANE -->
+      <h3 class="text-lg font-bold mb-3">Sintaxe Cochrane e Leitura Crítica de Revisões</h3>
+      <div class="accordion mb-6">
+        <details>
+          <summary class="font-semibold">
+            Campos de Busca Especializados: 
+            <span class="term-tip" tabindex="0">campos :ti, :ab, :kw
+              <span class="tip-box">Sintaxe de qualificação de campos na Cochrane: :ti pesquisa no título; :ab pesquisa no resumo; :kw nas palavras-chave. Podem ser agrupadas como :ti,ab,kw para busca integrada.</span>
+            </span>
+          </summary>
+          <div class="p-3 text-sm">
+            <p>No Cochrane Search Manager, as tags de campo utilizam dois pontos:</p>
+            <ul>
+              <li><code>"stroke":ti</code> busca o termo estritamente no Título.</li>
+              <li><code>"stroke":ab</code> busca no Resumo (Abstract).</li>
+              <li><code>"stroke":ti,ab,kw</code> busca combinada em Título, Resumo ou Palavras-chave do autor.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary class="font-semibold">Qual a diferença prática entre CDSR e CENTRAL?</summary>
+          <div class="p-3 text-sm">
+            <p><strong>CDSR:</strong> Contém revisões sistemáticas conduzidas pela própria colaboração Cochrane, seguindo o padrão-ouro de rigor metodológico e meta-análise.</p>
+            <p><strong>CENTRAL:</strong> É um repositório gigantesco de artigos de ensaios clínicos primários individuais. Uma busca no Cochrane Library apresenta abas separadas para resultados do CDSR e do CENTRAL.</p>
+          </div>
+        </details>
+        <details>
+          <summary class="font-semibold">Como ler criticamente uma Revisão Sistemática Cochrane</summary>
+          <div class="p-3 text-sm">
+            <ol>
+              <li><strong>Pergunta clínica e critérios de elegibilidade:</strong> Confira se a população da revisão condiz com seu paciente real.</li>
+              <li><strong>Avaliação de Risco de Viés (RoB 2):</strong> Analise os gráficos em semáforo (verde, amarelo, vermelho) de cada ensaio incluído.</li>
+              <li><strong>Certeza da Evidência (GRADE):</strong> Observe a tabela <em>Summary of Findings</em> (SoF) para saber se a certeza é Alta, Moderada, Baixa ou Muito Baixa.</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+
+      <!-- VÍDEO COCHRANE -->
+      <h3 class="text-lg font-bold mb-3">Videoaula Complementar</h3>
+      <div class="card p-3 mb-6" style="max-width: 600px;">
+        <div class="video-card-thumb" id="video-wrap-4NWDYYkgy3Q" onclick="loadLazyVideo('4NWDYYkgy3Q', 'video-wrap-4NWDYYkgy3Q')">
+          <img src="https://img.youtube.com/vi/4NWDYYkgy3Q/hqdefault.jpg" alt="PBE e Revisões Sistemáticas" loading="lazy">
+          <div class="play-btn-overlay"><svg width="24" height="24" fill="#ffffff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <h4 class="text-sm font-bold mt-2 mb-1">Prática Baseada em Evidências — Como e onde realizar buscas por revisões sistemáticas?</h4>
+        <p class="text-xs muted mb-2">Compreenda a hierarquia das evidências e a localização de sínteses metodológicas.</p>
+        <a class="btn" data-variant="link" data-size="sm" href="https://www.youtube.com/watch?v=4NWDYYkgy3Q" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+      </div>
+
+      <div class="panel p-4 text-center" style="background: #eef7f6; border: 1px dashed var(--accent);">
+        <h4 class="text-base font-bold m-0" style="color: var(--accent);">Criar estratégia numerada para Cochrane?</h4>
+        <p class="text-sm muted mt-1 mb-3">Veja o formato linha a linha (#1, #2, #3) aceito no Search Manager da Cochrane.</p>
+        <button class="btn" onclick="openLabModal('cochrane')">Abrir Laboratório de busca com sintaxe Cochrane</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL: LABORATÓRIO DE BUSCA (SIMULADOR TRANSFORMACIONAL) -->
+  <dialog class="dialog" id="modalLab" aria-labelledby="labTitle">
+    <div class="modal-inner">
+      <div class="modal-header">
+        <div>
+          <h3 class="text-base font-bold m-0" id="labTitle">Laboratório de Busca Interativa</h3>
+          <p class="text-xs muted m-0">Construa e adapte sua estratégia de busca entre as diferentes bases</p>
+        </div>
+        <button class="btn" data-variant="ghost" data-size="icon" data-dialog-close aria-label="Fechar modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="field mb-3">
+          <label for="labTargetDb" class="font-semibold text-xs">Selecione a Base Alvo:</label>
+          <select class="input" id="labTargetDb">
+            <option value="pubmed">PubMed (NLM)</option>
+            <option value="pedro">PEDro (Physiotherapy Evidence Database)</option>
+            <option value="cochrane">Cochrane Library (CDSR / CENTRAL)</option>
+          </select>
+        </div>
+
+        <div class="stack gap-2">
+          <div class="field">
+            <label for="labP" class="text-xs font-semibold">População (P) — Separe termos por ponto e vírgula (;)</label>
+            <input class="input" id="labP" value="low back pain; lumbago; lumbar pain">
+          </div>
+          <div class="field">
+            <label for="labI" class="text-xs font-semibold">Intervenção (I) — Separe termos por ponto e vírgula (;)</label>
+            <input class="input" id="labI" value="exercise therapy; resistance training; physiotherapy">
+          </div>
+          <div class="field">
+            <label for="labC" class="text-xs font-semibold muted">Comparação (C, opcional)</label>
+            <input class="input" id="labC" placeholder="ex.: control; sham; usual care">
+          </div>
+          <div class="field">
+            <label for="labO" class="text-xs font-semibold muted">Desfecho (O, opcional)</label>
+            <input class="input" id="labO" placeholder="ex.: pain relief; disability; functional status">
+          </div>
+        </div>
+
+        <div class="row between mt-4 mb-2">
+          <div class="row gap-2">
+            <span class="badge" data-variant="secondary" id="labConceptCount">2 conceitos ativos</span>
+            <span class="badge" data-variant="outline" id="labSynonymCount">6 termos no total</span>
+          </div>
+          <button class="btn" data-variant="ghost" data-size="sm" id="btnLabClear">Limpar</button>
+        </div>
+
+        <div class="field">
+          <label class="text-xs font-bold muted">String de Busca Gerada para a base:</label>
+          <div class="syntax-box mt-1" id="labOutputBox" style="white-space: pre-wrap; word-break: break-word;">
+            <!-- String gerada dinamicamente -->
+          </div>
+        </div>
+
+        <div class="alert text-xs mt-3" style="padding: 8px 12px;">
+          ⚠️ <strong>Aviso metodológico:</strong> Revise os termos no idioma e no vocabulário controlado de cada base antes de executar. Truncamentos (*) devem ser testados para evitar explosão indevida.
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn" data-variant="outline" data-dialog-close>Fechar</button>
+        <button class="btn" data-variant="primary" id="btnCopyLab">Copiar Estratégia</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL: EXERCÍCIO (QUIZ DE 6 QUESTÕES) -->
+  <dialog class="dialog" id="modalQuiz" aria-labelledby="quizTitle">
+    <div class="modal-inner">
+      <div class="modal-header">
+        <div>
+          <h3 class="text-base font-bold m-0" id="quizTitle">Exercício de Fixação</h3>
+          <p class="text-xs muted m-0">Avalie seu aprendizado sobre bases e busca sistemática</p>
+        </div>
+        <button class="btn" data-variant="ghost" data-size="icon" data-dialog-close aria-label="Fechar exercício">✕</button>
+      </div>
+
+      <div class="modal-body" id="quizBody">
+        <!-- Injetado dinamicamente via JS (questão ou resultado final) -->
+      </div>
+
+      <div class="modal-footer" id="quizFooter">
+        <span class="text-xs muted grow" id="quizProgressText">Questão 1 de 6</span>
+        <button class="btn" data-variant="outline" data-dialog-close>Sair</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- RODAPÉ COMPLETO -->
+  <footer class="shell-footer mt-6 p-6" style="background: #ffffff; border-top: 1px solid var(--border);">
+    <div class="shell-container">
+      <div class="stack gap-5">
+
+        <!-- 1) SEÇÃO DE REFERÊNCIAS RETRÁTIL (ACCORDION ABNT) -->
+        <div class="ref-accordion">
+          <div class="row between p-2" style="background: #ffffff; border-bottom: 1px solid var(--border);">
+            <button type="button" class="ref-header-btn grow" id="btnToggleRef" aria-expanded="false" aria-controls="refAccordionContent">
+              <span class="row gap-2" style="align-items: center;">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <span>Referências (ABNT)</span>
+              </span>
+              <svg class="ref-chevron" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <button type="button" class="btn" data-variant="link" data-size="sm" id="btnExpandAllRef" style="margin-right: 8px;">
+              Expandir todas
+            </button>
+          </div>
+
+          <div class="ref-collapsible-wrapper" id="refAccordionContent" role="region" aria-labelledby="btnToggleRef">
+            <div class="ref-collapsible-inner p-4">
+              <div class="stack gap-3 text-xs" style="line-height: 1.6; color: var(--text-muted);">
+                <p class="m-0">BIBLIOTECA VIRTUAL EM SAÚDE. <strong>DeCS:</strong> Descritores em Ciências da Saúde. São Paulo: BIREME/OPAS/OMS. Disponível em: &lt;https://decs.bvsalud.org&gt;. Acesso em: 26 out. 2026.</p>
+                <p class="m-0">COCHRANE LIBRARY. <strong>Cochrane Reviews and CENTRAL</strong>. London: Cochrane. Disponível em: &lt;https://www.cochranelibrary.com&gt;. Acesso em: 26 out. 2026.</p>
+                <p class="m-0">COSTA, Carla Cristina da. <strong>Um método de ensino de construção de infográficos baseado no visual thinking e no design thinking</strong>. In: CONGRESSO INTERNACIONAL DE DESIGN DA INFORMAÇÃO, 2015. Anais [...]. 2015.</p>
+                <p class="m-0">GETS UFC. <strong>Como pesquisar na PUBMED</strong>. [S. l.]: YouTube, [s. d.]. 1 vídeo (15 min). Disponível em: &lt;https://www.youtube.com/watch?v=WZ1jBzidHp8&gt;. Acesso em: 26 out. 2026.</p>
+                <p class="m-0">GETS UFC. <strong>Como usar o DeCS e os operadores booleanos</strong>. [S. l.]: YouTube, [s. d.]. 1 vídeo (12 min). Disponível em: &lt;https://www.youtube.com/watch?v=1lZfaBhikcA&gt;. Acesso em: 26 out. 2026.</p>
+                <p class="m-0">GETS UFC. <strong>O que são as bases de dados?</strong> [S. l.]: YouTube, [s. d.]. 1 vídeo (10 min). Disponível em: &lt;https://www.youtube.com/watch?v=7N8L8ije53Y&gt;. Acesso em: 26 out. 2026.</p>
+                <p class="m-0">NATIONAL LIBRARY OF MEDICINE. <strong>PubMed</strong>. Bethesda: NCBI. Disponível em: &lt;https://pubmed.ncbi.nlm.nih.gov&gt;. Acesso em: 26 out. 2026.</p>
+                <p class="m-0">NATIONAL LIBRARY OF MEDICINE. <strong>Tutorials: PubMed</strong>. [S. l.]: YouTube, [s. d.]. 1 playlist. Disponível em: &lt;https://www.youtube.com/playlist?list=PL7dF9e2qSW0YkmxDTsUG6p4hJjYOPT0Uj&gt;. Acesso em: 26 out. 2026.</p>
+                <p class="m-0">PHYSIOTHERAPY EVIDENCE DATABASE. <strong>PEDro</strong>. Sydney: Institute for Musculoskeletal Health. Disponível em: &lt;https://pedro.org.au&gt;. Acesso em: 26 out. 2026.</p>
+                <p class="m-0">PHYSIOTHERAPY EVIDENCE DATABASE. <strong>You Ask #PEDroAnswers Vídeo 01, 02 e 03</strong>. [S. l.]: YouTube, [s. d.]. 3 vídeos. Disponíveis em: &lt;https://www.youtube.com/watch?v=h0461BVQ7VE&gt;, &lt;https://www.youtube.com/watch?v=l0bnTsp98u0&gt;, &lt;https://www.youtube.com/watch?v=oyK1UmOPjYg&gt;. Acesso em: 26 out. 2026.</p>
+                <p class="m-0">PRÁTICA BASEADA EM EVIDÊNCIAS. <strong>Como e onde realizar buscas por revisões sistemáticas?</strong> [S. l.]: YouTube, [s. d.]. 1 vídeo. Disponível em: &lt;https://www.youtube.com/watch?v=4NWDYYkgy3Q&gt;. Acesso em: 26 out. 2026.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2) BANNER FINAL DE ENCERRAMENTO -->
+        <div class="closing-banner" style="text-align: left;">
+          <!-- Bloco 1: Título em destaque -->
+          <h2 class="text-xl font-bold m-0" style="color: #10242b; line-height: 1.3; text-align: left;">
+            Guia interativo de busca em bases de dados
+          </h2>
+          <!-- Bloco 2: Créditos em linha secundária -->
+          <p class="text-sm font-semibold m-0 mt-2" style="color: var(--accent); text-align: left;">
+            Profa. Dra. Andréa Soares Rocha da Silva
+          </p>
+          <p class="text-xs muted m-0 mt-2" style="text-align: left; line-height: 1.5;">
+            Módulo Pesquisa em Fisioterapia I — Curso de Graduação em Fisioterapia — Universidade Federal do Ceará (UFC)
+          </p>
+          <p class="text-xs muted m-0 mt-1" style="text-align: left;">
+            Grupo Educação, Tecnologia e Saúde (GETS)
+          </p>
+          <!-- Bloco 3: Aviso legal em corpo menor -->
+          <p class="text-xs m-0 mt-3 pt-3" style="border-top: 1px solid rgba(15, 118, 110, 0.2); color: #3b535d; line-height: 1.5; text-align: left;">
+            Direitos de uso e aviso legal: Uso educacional restrito. As fontes e videoaulas utilizadas mantêm suas próprias licenças e estão referenciadas em ABNT ao final.
+          </p>
+        </div>
+
+        <!-- 3) CARTÃO: COMO CITAR ESTE RECURSO -->
+        <div class="card p-4" style="border: 1px solid var(--border); text-align: left;">
+          <header class="row between mb-2">
+            <h3 class="text-base font-bold m-0" style="color: var(--accent); text-align: left;">Como citar este recurso</h3>
+            <button type="button" class="btn" data-variant="primary" data-size="sm" id="btnCopyCitation">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+              Copiar citação
+            </button>
+          </header>
+          <section style="text-align: left;">
+            <div class="citation-box" id="citationContentText" tabindex="0" style="text-align: left;">SOARES, Andréa. Guia interativo de busca em bases de dados. 2026. Infográfico interativo (recurso educacional digital). Disponível em: [endereço da página publicada]. Acesso em: 26 out. 2026.</div>
+            <p class="text-xs muted m-0 mt-2" style="text-align: left;">
+              Substitua o endereço entre colchetes pelo link da página publicada. Citação no corpo do texto, conforme NBR 10520:2023: (Soares, 2026).
+            </p>
+          </section>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* =========================================================
+       ESTADO E PROGRESSO GLOBAL
+    ========================================================= */
+    const userProgress = {
+      visitedTabs: new Set([1]),
+      completedQuiz: false
+    };
+
+    function updateProgressBar() {
+      // 4 abas (20% cada = 80%) + quiz concluído (20%)
+      const tabCount = userProgress.visitedTabs.size;
+      const quizBonus = userProgress.completedQuiz ? 20 : 0;
+      let totalPct = (tabCount * 20) + quizBonus;
+      if (totalPct > 100) totalPct = 100;
+      
+      const bar = document.getElementById('globalProgressBar');
+      const openingLabel = document.getElementById('openingProgLabel');
+      const compactBar = document.getElementById('compactProgressBar');
+      const compactLabel = document.getElementById('compactProgLabel');
+
+      if (bar) bar.style.width = totalPct + '%';
+      if (openingLabel) openingLabel.textContent = 'Explorado: ' + totalPct + '%';
+      if (compactBar) compactBar.style.width = totalPct + '%';
+      if (compactLabel) compactLabel.textContent = 'Explorado: ' + totalPct + '%';
+    }
+
+    /* =========================================================
+       CONTROLE DA FAIXA COMPACTA (INTERSECTION OBSERVER + ROLAGEM)
+    ========================================================= */
+    const compactNav = document.getElementById('compactNav');
+    const openingBanner = document.getElementById('openingBanner');
+    let isPastOpeningBanner = false;
+    let lastScrollY = window.scrollY;
+    const SCROLL_THRESHOLD = 8; // limiar contra tremor
+
+    function initCompactNav() {
+      if (!compactNav || !openingBanner) return;
+
+      // IntersectionObserver para detectar quando passou do banner de abertura
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          // Quando o banner de abertura sai da tela pelo topo
+          if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+            isPastOpeningBanner = true;
+            showCompactNav();
+          } else {
+            isPastOpeningBanner = false;
+            hideCompactNav(true);
+          }
+        });
+      }, {
+        threshold: 0
+      });
+
+      observer.observe(openingBanner);
+
+      // Listener de scroll para recolher ao descer e mostrar ao subir
+      window.addEventListener('scroll', () => {
+        const currentY = window.scrollY;
+        const diff = currentY - lastScrollY;
+
+        if (!isPastOpeningBanner) {
+          hideCompactNav(true);
+          lastScrollY = currentY;
+          return;
+        }
+
+        if (Math.abs(diff) < SCROLL_THRESHOLD) {
+          return;
+        }
+
+        if (diff > 0) {
+          // Rolando para BAIXO: recolhe a faixa para leitura livre
+          hideCompactNav(false);
+        } else {
+          // Rolando para CIMA: reaparece suavemente
+          showCompactNav();
+        }
+
+        lastScrollY = currentY;
+      }, { passive: true });
+    }
+
+    function showCompactNav() {
+      if (!compactNav) return;
+      compactNav.classList.remove('is-hidden');
+      compactNav.classList.add('is-visible');
+      compactNav.setAttribute('aria-hidden', 'false');
+    }
+
+    function hideCompactNav(immediate) {
+      if (!compactNav) return;
+      compactNav.classList.remove('is-visible');
+      compactNav.classList.add('is-hidden');
+      compactNav.setAttribute('aria-hidden', 'true');
+    }
+
+    /* =========================================================
+       NAVEGAÇÃO POR ABAS ACESSÍVEL & MENU MOBILE RESPONSIVO
+    ========================================================= */
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-content');
+    const mobileTabTrigger = document.getElementById('mobileTabTrigger');
+    const mobileTabDropdown = document.getElementById('mobileTabDropdown');
+    const mobileTabBackdrop = document.getElementById('mobileTabBackdrop');
+    const mobileTabOptions = document.querySelectorAll('.mobile-tab-option');
+    const mobileTabCurrentLabel = document.getElementById('mobileTabCurrentLabel');
+    const mobileTabTriggerIcon = document.getElementById('mobileTabTriggerIcon');
+    const compactCurrentSectionName = document.getElementById('compactCurrentSectionName');
+
+    const tabMetadata = {
+      '1': {
+        name: '1. Conceituação',
+        icon: '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>'
+      },
+      '2': {
+        name: '2. PubMed',
+        icon: '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>'
+      },
+      '3': {
+        name: '3. PEDro',
+        icon: '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>'
+      },
+      '4': {
+        name: '4. Cochrane',
+        icon: '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>'
+      }
+    };
+
+    let activeTabId = '1';
+
+    function openMobileDropdown() {
+      if (!mobileTabTrigger || !mobileTabDropdown) return;
+      mobileTabTrigger.setAttribute('aria-expanded', 'true');
+      mobileTabDropdown.classList.add('is-open');
+      mobileTabBackdrop?.classList.add('is-open');
+
+      // Foca a opção atualmente ativa dentro do menu
+      const currentActiveOpt = mobileTabDropdown.querySelector('.mobile-tab-option.is-active') || mobileTabOptions[0];
+      if (currentActiveOpt) {
+        setTimeout(() => currentActiveOpt.focus(), 40);
+      }
+    }
+
+    function closeMobileDropdown(returnFocus = true) {
+      if (!mobileTabTrigger || !mobileTabDropdown) return;
+      mobileTabTrigger.setAttribute('aria-expanded', 'false');
+      mobileTabDropdown.classList.remove('is-open');
+      mobileTabBackdrop?.classList.remove('is-open');
+      if (returnFocus && document.activeElement && mobileTabDropdown.contains(document.activeElement)) {
+        mobileTabTrigger.focus();
+      }
+    }
+
+    function toggleMobileDropdown() {
+      const isOpen = mobileTabTrigger?.getAttribute('aria-expanded') === 'true';
+      if (isOpen) {
+        closeMobileDropdown();
+      } else {
+        openMobileDropdown();
+      }
+    }
+
+    function updateTabStatusBadges() {
+      for (let i = 1; i <= 4; i++) {
+        const badge = document.getElementById('tabStatus-' + i);
+        if (!badge) continue;
+        const isCurrent = (String(i) === String(activeTabId));
+        const isVisited = userProgress.visitedTabs.has(i);
+
+        if (isCurrent) {
+          badge.className = 'mobile-tab-opt-badge badge-done';
+          badge.textContent = 'Ativa ✓';
+        } else if (isVisited) {
+          badge.className = 'mobile-tab-opt-badge badge-done';
+          badge.textContent = 'Visitada ✓';
+        } else {
+          badge.className = 'mobile-tab-opt-badge badge-pending';
+          badge.textContent = 'Pendente';
+        }
+      }
+    }
+
+    function switchTab(targetId, shouldFocusPanel = false) {
+      targetId = String(targetId);
+      activeTabId = targetId;
+      userProgress.visitedTabs.add(Number(targetId));
+
+      // 1. Atualiza botões desktop
+      tabButtons.forEach(btn => {
+        const id = btn.getAttribute('data-tab-id');
+        const isMatch = (id === targetId);
+        btn.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+      });
+
+      // 2. Atualiza opções móveis do dropdown
+      mobileTabOptions.forEach(opt => {
+        const id = opt.getAttribute('data-tab-id');
+        const isMatch = (id === targetId);
+        opt.setAttribute('aria-checked', isMatch ? 'true' : 'false');
+        if (isMatch) opt.classList.add('is-active');
+        else opt.classList.remove('is-active');
+      });
+
+      // 3. Atualiza rótulo e ícone no botão trigger mobile e na barra compacta
+      const meta = tabMetadata[targetId] || tabMetadata['1'];
+      if (mobileTabCurrentLabel) mobileTabCurrentLabel.textContent = meta.name;
+      if (mobileTabTriggerIcon) mobileTabTriggerIcon.innerHTML = meta.icon;
+      if (compactCurrentSectionName) compactCurrentSectionName.textContent = meta.name;
+
+      // 4. Alterna painéis de conteúdo
+      tabPanels.forEach(panel => {
+        panel.classList.remove('is-active');
+      });
+
+      const activePanel = document.getElementById('panel-' + targetId);
+      if (activePanel) {
+        activePanel.classList.add('is-active');
+        if (shouldFocusPanel) {
+          activePanel.setAttribute('tabindex', '-1');
+          activePanel.focus();
+        }
+      }
+
+      updateTabStatusBadges();
+      updateProgressBar();
+    }
+
+    // Função global para quando clica no badge da faixa compacta
+    window.scrollAndOpenTabsMenu = function() {
+      const navWrapper = document.getElementById('navTabsWrapper');
+      if (navWrapper) {
+        navWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+          if (window.innerWidth <= 720) {
+            openMobileDropdown();
+          } else {
+            const activeBtn = document.querySelector(`.tab-btn[data-tab-id="${activeTabId}"]`);
+            if (activeBtn) activeBtn.focus();
+          }
+        }, 320);
+      }
+    };
+
+    // Eventos Desktop
+    tabButtons.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        switchTab(btn.getAttribute('data-tab-id'));
+      });
+
+      btn.addEventListener('keydown', (e) => {
+        let newIndex = null;
+        if (e.key === 'ArrowRight') {
+          newIndex = (index + 1) % tabButtons.length;
+        } else if (e.key === 'ArrowLeft') {
+          newIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+        }
+
+        if (newIndex !== null) {
+          e.preventDefault();
+          tabButtons[newIndex].focus();
+          switchTab(tabButtons[newIndex].getAttribute('data-tab-id'));
+        }
+      });
+    });
+
+    // Eventos Mobile Trigger e Dropdown
+    mobileTabTrigger?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMobileDropdown();
+    });
+
+    mobileTabBackdrop?.addEventListener('click', () => {
+      closeMobileDropdown();
+    });
+
+    mobileTabOptions.forEach((opt, optIdx) => {
+      opt.addEventListener('click', () => {
+        const tid = opt.getAttribute('data-tab-id');
+        closeMobileDropdown(false);
+        switchTab(tid, true);
+      });
+
+      // Navegação por setas dentro do menu dropdown
+      opt.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          const next = mobileTabOptions[(optIdx + 1) % mobileTabOptions.length];
+          next?.focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          const prev = mobileTabOptions[(optIdx - 1 + mobileTabOptions.length) % mobileTabOptions.length];
+          prev?.focus();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          closeMobileDropdown(true);
+        } else if (e.key === 'Tab') {
+          closeMobileDropdown(false);
+        }
+      });
+    });
+
+    // Fechar menu mobile com tecla ESC global ou toque fora
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileTabDropdown?.classList.contains('is-open')) {
+        closeMobileDropdown(true);
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (mobileTabDropdown?.classList.contains('is-open')) {
+        if (!mobileTabDropdown.contains(e.target) && !mobileTabTrigger?.contains(e.target)) {
+          closeMobileDropdown();
+        }
+      }
+    });
+
+    // Alternância suave entre desktop e mobile preservando aba ativa no redimensionamento
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 720 && mobileTabDropdown?.classList.contains('is-open')) {
+        closeMobileDropdown(false);
+      }
+    }, { passive: true });
+
+    /* =========================================================
+       SIMULADOR 1: PICO
+    ========================================================= */
+    const picoP = document.getElementById('picoP');
+    const picoI = document.getElementById('picoI');
+    const picoC = document.getElementById('picoC');
+    const picoO = document.getElementById('picoO');
+    const picoT = document.getElementById('picoT');
+    const picoQuestionResult = document.getElementById('picoQuestionResult');
+    const picoBlockResult = document.getElementById('picoBlockResult');
+    const btnFillPicoExample = document.getElementById('btnFillPicoExample');
+    const btnCopyPico = document.getElementById('btnCopyPico');
+
+    function updatePico() {
+      const p = (picoP?.value || '').trim();
+      const i = (picoI?.value || '').trim();
+      const c = (picoC?.value || '').trim();
+      const o = (picoO?.value || '').trim();
+      const t = (picoT?.value || '').trim();
+
+      if (!p && !i && !o) {
+        picoQuestionResult.textContent = 'Preencha os campos acima para ver a pergunta formulada.';
+        picoBlockResult.textContent = '(Conceito P) AND (Conceito I) AND (Conceito O)';
+        return;
+      }
+
+      let q = 'Em ' + (p || '[população]');
+      q += ', qual é a eficácia de ' + (i || '[intervenção]');
+      if (c) q += ' comparado a ' + c;
+      q += ' na melhora de ' + (o || '[desfecho]') + '?';
+      if (t) q += ' [Delineamento: ' + t + ']';
+      picoQuestionResult.textContent = q;
+
+      const blocks = [];
+      if (p) blocks.push('("' + p + '")');
+      if (i) blocks.push('("' + i + '")');
+      if (c) blocks.push('("' + c + '")');
+      if (o) blocks.push('("' + o + '")');
+      if (t) blocks.push('("' + t + '")');
+
+      picoBlockResult.textContent = blocks.join(' AND ');
+    }
+
+    [picoP, picoI, picoC, picoO, picoT].forEach(inp => {
+      inp?.addEventListener('input', updatePico);
+    });
+
+    btnFillPicoExample?.addEventListener('click', () => {
+      picoP.value = 'idosos com dor lombar crônica';
+      picoI.value = 'exercício terapêutico';
+      picoC.value = 'fisioterapia convencional';
+      picoO.value = 'redução da dor e funcionalidade';
+      picoT.value = 'ensaio clínico randomizado';
+      updatePico();
+      if (window.skipUI?.toast) {
+        window.skipUI.toast('Exemplo clínico pré-preenchido com sucesso!', { type: 'success' });
+      }
+    });
+
+    btnCopyPico?.addEventListener('click', () => {
+      const textToCopy = `PERGUNTA CLÍNICA:\n${picoQuestionResult.textContent}\n\nBLOCO LÓGICO:\n${picoBlockResult.textContent}`;
+      navigator.clipboard?.writeText(textToCopy).then(() => {
+        if (window.skipUI?.toast) {
+          window.skipUI.toast('Pergunta e conceitos copiados!', { type: 'success' });
+        }
+      });
+    });
+
+    /* =========================================================
+       SIMULADOR 2: MÁQUINA BOOLEANA & VENN
+    ========================================================= */
+    const boolTermA = document.getElementById('boolTermA');
+    const boolTermB = document.getElementById('boolTermB');
+    const btnOpAnd = document.getElementById('btnOpAnd');
+    const btnOpOr = document.getElementById('btnOpOr');
+    const btnOpNot = document.getElementById('btnOpNot');
+    const boolStringOutput = document.getElementById('boolStringOutput');
+    const boolExplanation = document.getElementById('boolExplanation');
+
+    const vennRegionAOnly = document.getElementById('vennRegionAOnly');
+    const vennRegionBOnly = document.getElementById('vennRegionBOnly');
+    const vennIntersection = document.getElementById('vennIntersection');
+    const vennCenterLabel = document.getElementById('vennCenterLabel');
+
+    let currentBoolOp = 'AND';
+
+    function setBooleanOp(op) {
+      currentBoolOp = op;
+      [btnOpAnd, btnOpOr, btnOpNot].forEach(btn => {
+        btn.setAttribute('data-variant', 'outline');
+      });
+
+      const termA = (boolTermA?.value || 'termo A').trim();
+      const termB = (boolTermB?.value || 'termo B').trim();
+
+      if (op === 'AND') {
+        btnOpAnd.setAttribute('data-variant', 'primary');
+        boolStringOutput.innerHTML = `"${termA}" <span class="kw-op">AND</span> "${termB}"`;
+        boolExplanation.textContent = `AND restringe: recupera apenas os artigos que contêm simultaneamente "${termA}" E "${termB}".`;
+        
+        vennRegionAOnly.setAttribute('opacity', '0');
+        vennRegionBOnly.setAttribute('opacity', '0');
+        vennIntersection.setAttribute('opacity', '1');
+        vennCenterLabel.setAttribute('opacity', '1');
+      } else if (op === 'OR') {
+        btnOpOr.setAttribute('data-variant', 'primary');
+        boolStringOutput.innerHTML = `"${termA}" <span class="kw-op">OR</span> "${termB}"`;
+        boolExplanation.textContent = `OR amplia: recupera artigos que contenham "${termA}", "${termB}" ou ambos (ideal para sinônimos).`;
+        
+        vennRegionAOnly.setAttribute('opacity', '0.7');
+        vennRegionBOnly.setAttribute('opacity', '0.7');
+        vennIntersection.setAttribute('opacity', '1');
+        vennCenterLabel.setAttribute('opacity', '1');
+      } else if (op === 'NOT') {
+        btnOpNot.setAttribute('data-variant', 'primary');
+        boolStringOutput.innerHTML = `"${termA}" <span class="kw-op">NOT</span> "${termB}"`;
+        boolExplanation.textContent = `NOT exclui: recupera tudo de "${termA}", exceto os artigos que também mencionam "${termB}". Use com cautela!`;
+        
+        vennRegionAOnly.setAttribute('opacity', '0.9');
+        vennRegionBOnly.setAttribute('opacity', '0');
+        vennIntersection.setAttribute('opacity', '0');
+        vennCenterLabel.setAttribute('opacity', '0');
+      }
+    }
+
+    btnOpAnd?.addEventListener('click', () => setBooleanOp('AND'));
+    btnOpOr?.addEventListener('click', () => setBooleanOp('OR'));
+    btnOpNot?.addEventListener('click', () => setBooleanOp('NOT'));
+    boolTermA?.addEventListener('input', () => setBooleanOp(currentBoolOp));
+    boolTermB?.addEventListener('input', () => setBooleanOp(currentBoolOp));
+
+    /* =========================================================
+       STEPPERS (PUBMED, PEDRO, COCHRANE)
+    ========================================================= */
+    const pubmedSteps = [
+      { title: '1. Traduza a pergunta em conceitos (PICO)', text: 'Identifique os componentes essenciais (População, Intervenção, Comparação e Desfecho). Não busque a pergunta inteira como frase corrida; separe cada conceito em blocos isolados.' },
+      { title: '2. Identifique descritores MeSH e termos livres', text: 'Consulte o MeSH Database (Medical Subject Headings). Encontre o descritor oficial para a condição e a intervenção, e anote os sinônimos (Entry Terms) mais usados pelos autores.' },
+      { title: '3. Combine com OR internamente e AND entre conceitos', text: 'Dentro de cada conceito, conecte os sinônimos com OR: (termo1 OR termo2). Em seguida, una os blocos conceituais com AND: (bloco P) AND (bloco I).' },
+      { title: '4. Use truncamento e aspas com precisão', text: 'Use aspas para termos compostos exatos como "low back pain". Utilize o asterisco (*) para radical de palavras: physiotherap* recuperará physiotherapy e physiotherapist.' },
+      { title: '5. Aplique filtros metodológicos', text: 'Na barra lateral esquerda da PubMed, refine por "Clinical Trial", "Randomized Controlled Trial" ou "Systematic Review". Restrinja período temporal se apropriado.' },
+      { title: '6. Revise os resultados e ajuste a estratégia', text: 'Examine os primeiros 20 resultados. Encontrou termos relevantes não previstos? Adicione-os ao bloco OR. A busca retornou pouco? Remova termos excessivamente específicos.' }
+    ];
+
+    const pedroSteps = [
+      { title: '1. Formule a pergunta clínica em fisioterapia', text: 'Defina com exatidão a patologia motora/funcional e o recurso fisioterapêutico (cinesioterapia, eletroterapia, terapia manual, etc.).' },
+      { title: '2. Defina os termos em inglês', text: 'A PEDro indexa apenas em língua inglesa. Utilize o DeCS ou o MeSH para traduzir com segurança os termos clínicos do português para o inglês.' },
+      { title: '3. Distribua os termos entre os campos da Busca Avançada', text: 'Não coloque tudo numa caixa só. Coloque a condição clínica em "Abstract & Title" ou "Problem", e selecione a subdisciplina ou parte do corpo nas caixas drop-down.' },
+      { title: '4. Use OR para sinônimos dentro do mesmo campo', text: 'A PEDro aceita o operador OR dentro da mesma caixa de texto para reunir termos correlatos (ex.: "back pain OR lumbago").' },
+      { title: '5. Aplique filtros de método e ano', text: 'Selecione "clinical trial" na caixa Method para focar em ensaios com avaliação pela Escala PEDro, ou "systematic review" para sínteses prévias.' },
+      { title: '6. Refine e registre a pontuação metodológica', text: 'Observe o escore de 0 a 10 atribuído aos ensaios clínicos encontrados. Registre a data da busca e a estratégia completa para seu trabalho científico.' }
+    ];
+
+    const cochraneSteps = [
+      { title: '1. Escolha a base de dados alvo', text: 'Decida se você busca sínteses de evidência completas (CDSR - Cochrane Database of Systematic Reviews) ou ensaios clínicos primários individuais no CENTRAL.' },
+      { title: '2. Monte linhas de busca no Search Manager', text: 'No construtor avançado da Cochrane, cada linha é identificada por # (ex.: #1, #2). Isso traz clareza total à construção lógica de grandes buscas.' },
+      { title: '3. Use OR para sinônimos e AND entre blocos', text: 'Linha #1 com sinônimos de dor lombar (OR). Linha #2 com sinônimos de exercício (OR). Linha #3 combinando as duas: #1 AND #2.' },
+      { title: '4. Acrescente descritores MeSH integrados', text: 'A Cochrane possui ferramenta nativa que busca e explode a árvore MeSH diretamente nas linhas de busca com sintaxe própria.' },
+      { title: '5. Aplique limites de data e tipo de publicação', text: 'Defina limites no painel direito: revisões Cochrane com status "Review" (artigo final) ou "Protocol" (protocolo em andamento).' },
+      { title: '6. Exporte os registros recuperados', text: 'Exporte para arquivos no formato RIS, CSV ou BibTeX para triagem em softwares de revisão sistemática como Rayyan ou EndNote.' }
+    ];
+
+    function createStepper(navId, contentId, indicatorId, prevBtnId, nextBtnId, steps) {
+      let currentStep = 0;
+      const navEl = document.getElementById(navId);
+      const contentEl = document.getElementById(contentId);
+      const indicatorEl = document.getElementById(indicatorId);
+      const prevBtn = document.getElementById(prevBtnId);
+      const nextBtn = document.getElementById(nextBtnId);
+      const pills = navEl ? navEl.querySelectorAll('.step-pill') : [];
+
+      function renderStep() {
+        pills.forEach((p, idx) => {
+          p.classList.remove('is-active');
+          if (idx < currentStep) p.classList.add('is-done');
+          else p.classList.remove('is-done');
+          if (idx === currentStep) p.classList.add('is-active');
+        });
+
+        const s = steps[currentStep];
+        contentEl.innerHTML = `
+          <h4 class="text-base font-bold m-0" style="color: var(--accent);">${s.title}</h4>
+          <p class="text-sm mt-2 mb-0" style="line-height: 1.6;">${s.text}</p>
+        `;
+
+        indicatorEl.textContent = `Etapa ${currentStep + 1} de ${steps.length}`;
+        prevBtn.disabled = (currentStep === 0);
+        nextBtn.textContent = (currentStep === steps.length - 1) ? 'Concluir' : 'Próxima Etapa →';
+      }
+
+      pills.forEach((pill, idx) => {
+        pill.addEventListener('click', () => {
+          currentStep = idx;
+          renderStep();
+        });
+      });
+
+      prevBtn?.addEventListener('click', () => {
+        if (currentStep > 0) {
+          currentStep--;
+          renderStep();
+        }
+      });
+
+      nextBtn?.addEventListener('click', () => {
+        if (currentStep < steps.length - 1) {
+          currentStep++;
+          renderStep();
+        } else {
+          if (window.skipUI?.toast) {
+            window.skipUI.toast('Etapas concluídas! Aplique o método no laboratório de busca.', { type: 'success' });
+          }
+        }
+      });
+
+      renderStep();
+    }
+
+    createStepper('stepperNavPubmed', 'stepperContentPubmed', 'stepIndicatorPubmed', 'btnPrevPubmed', 'btnNextPubmed', pubmedSteps);
+    createStepper('stepperNavPedro', 'stepperContentPedro', 'stepIndicatorPedro', 'btnPrevPedro', 'btnNextPedro', pedroSteps);
+    createStepper('stepperNavCochrane', 'stepperContentCochrane', 'stepIndicatorCochrane', 'btnPrevCochrane', 'btnNextCochrane', cochraneSteps);
+
+    /* =========================================================
+       LAZY VIDEO LOADERS
+    ========================================================= */
+    function loadLazyVideo(videoId, containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = `
+        <iframe 
+          style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+          src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0" 
+          title="Video player" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      `;
+    }
+
+    function loadLazyPlaylist(playlistId, containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = `
+        <iframe 
+          style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+          src="https://www.youtube-nocookie.com/embed/videoseries?list=${playlistId}&autoplay=1" 
+          title="Playlist player" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      `;
+    }
+
+    /* =========================================================
+       MODAL: LABORATÓRIO DE BUSCA
+    ========================================================= */
+    const modalLab = document.getElementById('modalLab');
+    const labTargetDb = document.getElementById('labTargetDb');
+    const labP = document.getElementById('labP');
+    const labI = document.getElementById('labI');
+    const labC = document.getElementById('labC');
+    const labO = document.getElementById('labO');
+    const labOutputBox = document.getElementById('labOutputBox');
+    const labConceptCount = document.getElementById('labConceptCount');
+    const labSynonymCount = document.getElementById('labSynonymCount');
+    const btnLabClear = document.getElementById('btnLabClear');
+    const btnCopyLab = document.getElementById('btnCopyLab');
+
+    function openLabModal(defaultDb) {
+      if (defaultDb && labTargetDb) {
+        labTargetDb.value = defaultDb;
+      }
+      modalLab?.showModal();
+      generateLabString();
+    }
+
+    function parseTerms(inputVal) {
+      if (!inputVal) return [];
+      return inputVal.split(';')
+        .map(t => t.trim())
+        .filter(t => t.length > 0);
+    }
+
+    function generateLabString() {
+      const db = labTargetDb?.value || 'pubmed';
+      const termsP = parseTerms(labP?.value);
+      const termsI = parseTerms(labI?.value);
+      const termsC = parseTerms(labC?.value);
+      const termsO = parseTerms(labO?.value);
+
+      const concepts = [
+        { name: 'P', terms: termsP },
+        { name: 'I', terms: termsI },
+        { name: 'C', terms: termsC },
+        { name: 'O', terms: termsO }
+      ].filter(c => c.terms.length > 0);
+
+      const totalTerms = concepts.reduce((acc, curr) => acc + curr.terms.length, 0);
+      if (labConceptCount) labConceptCount.textContent = `${concepts.length} conceito(s) ativo(s)`;
+      if (labSynonymCount) labSynonymCount.textContent = `${totalTerms} termo(s) no total`;
+
+      if (concepts.length === 0) {
+        labOutputBox.textContent = 'Insira ao menos um termo nos campos acima para montar a estratégia.';
+        return;
+      }
+
+      let result = '';
+
+      if (db === 'pubmed') {
+        // PubMed: ("termo"[tiab] OR "termo"[MeSH Terms]) AND (...)
+        const blocks = concepts.map(c => {
+          const sub = c.terms.map(t => `("${t}"[tiab] OR "${t}"[MeSH Terms])`).join(' OR ');
+          return `(${sub})`;
+        });
+        result = blocks.join('\nAND\n');
+      } else if (db === 'pedro') {
+        // PEDro: termos distribuídos nos campos
+        result = '=== FORMATO BUSCA AVANÇADA PEDRO ===\n';
+        if (termsP.length > 0) {
+          result += `Campo [Abstract & Title / Problem]:\n${termsP.map(t => `"${t}"`).join(' OR ')}\n\n`;
+        }
+        if (termsI.length > 0) {
+          result += `Campo [Therapy / Intervenção]:\n${termsI.map(t => `"${t}"`).join(' OR ')}\n\n`;
+        }
+        if (termsC.length > 0) {
+          result += `Campo de Comparação (se livre):\n${termsC.map(t => `"${t}"`).join(' OR ')}\n\n`;
+        }
+        if (termsO.length > 0) {
+          result += `Filtro de Desfecho:\n${termsO.map(t => `"${t}"`).join(' OR ')}\n\n`;
+        }
+        result += `(Os campos preenchidos são combinados automaticamente com AND pelo formulário da PEDro)`;
+      } else if (db === 'cochrane') {
+        // Cochrane: #1, #2, #3 no Search Manager
+        const lines = [];
+        let lineIdx = 1;
+        const lineNums = [];
+
+        concepts.forEach(c => {
+          const termStr = c.terms.map(t => `"${t}":ti,ab,kw`).join(' OR ');
+          lines.push(`#${lineIdx}  ${termStr}`);
+          lineNums.push(`#${lineIdx}`);
+          lineIdx++;
+        });
+
+        if (lineNums.length > 1) {
+          lines.push(`\n#${lineIdx}  ${lineNums.join(' AND ')}`);
+        }
+        result = lines.join('\n');
+      }
+
+      labOutputBox.textContent = result;
+    }
+
+    [labTargetDb, labP, labI, labC, labO].forEach(el => {
+      el?.addEventListener('input', generateLabString);
+      el?.addEventListener('change', generateLabString);
+    });
+
+    btnLabClear?.addEventListener('click', () => {
+      if (labP) labP.value = '';
+      if (labI) labI.value = '';
+      if (labC) labC.value = '';
+      if (labO) labO.value = '';
+      generateLabString();
+    });
+
+    btnCopyLab?.addEventListener('click', () => {
+      const str = labOutputBox?.textContent || '';
+      navigator.clipboard?.writeText(str).then(() => {
+        if (window.skipUI?.toast) {
+          window.skipUI.toast('Estratégia copiada para a área de transferência!', { type: 'success' });
+        }
+      });
+    });
+
+    /* =========================================================
+       MODAL: EXERCÍCIO / QUIZ (6 QUESTÕES)
+    ========================================================= */
+    const quizQuestions = [
+      {
+        question: '1. Qual operador booleano restringe a busca, exigindo que todos os termos estejam presentes simultaneamente no artigo?',
+        options: ['OR', 'AND', 'NOT', 'NEAR'],
+        answer: 1,
+        explanation: 'O operador AND realiza a interseção entre conjuntos, restringindo a busca aos artigos que contenham ambos os conceitos simultaneamente.'
+      },
+      {
+        question: '2. O vocabulário controlado DeCS (Descritores em Ciências da Saúde) é:',
+        options: [
+          'Um repositório de artigos completos em PDF mantido pela OMS',
+          'Um vocabulário controlado trilíngue, versão do MeSH desenvolvida pela BIREME para a América Latina',
+          'Um software pago de gestão de referências bibliográficas',
+          'Uma lista exclusiva de termos em inglês sem correspondência no português'
+        ],
+        answer: 1,
+        explanation: 'O DeCS é o vocabulário controlado estruturado e trilíngue (português, espanhol e inglês) criado pela BIREME/OPAS/OMS para indexar a literatura em saúde.'
+      },
+      {
+        question: '3. A PEDro (Physiotherapy Evidence Database) é uma base de dados que se destaca por:',
+        options: [
+          'Ser genérica para toda a biomedicina e veterinária',
+          'Indexar apenas resumos de congressos locais não publicados',
+          'Ser específica da fisioterapia, indexando ensaios clínicos, revisões sistemáticas e diretrizes',
+          'Exigir assinatura paga individual por meio de convênio médico'
+        ],
+        answer: 2,
+        explanation: 'A PEDro é específica da fisioterapia, indexa prioritariamente ensaios clínicos randomizados, revisões e diretrizes, e possui acesso livre global.'
+      },
+      {
+        question: '4. Qual base reúne as mais conceituadas revisões sistemáticas em saúde e o registro CENTRAL de ensaios clínicos?',
+        options: [
+          'Cochrane Library',
+          'Google Notícias',
+          'Scopus Free',
+          'Index Psi'
+        ],
+        answer: 0,
+        explanation: 'A Cochrane Library reúne o CDSR (Cochrane Database of Systematic Reviews) e o CENTRAL (Cochrane Central Register of Controlled Trials).'
+      },
+      {
+        question: '5. Na sintaxe de busca bibliográfica, o recurso "physiotherap*" representa:',
+        options: [
+          'Um erro tipográfico que anula a busca',
+          'Truncamento, que busca todas as variações de sufixo com a mesma raiz (physiotherapy, physiotherapist, etc.)',
+          'Uma expressão exata que só busca a palavra terminada em asterisco',
+          'Um operador de exclusão de termos'
+        ],
+        answer: 1,
+        explanation: 'O asterisco (*) é o símbolo universal de truncamento em bases de dados, resgatando derivados gramaticais e plurais da mesma raiz lexical.'
+      },
+      {
+        question: '6. A Escala PEDro é utilizada para avaliar:',
+        options: [
+          'O valor estético dos gráficos e tabelas do artigo',
+          'O impacto financeiro e o custo de medicamentos',
+          'A qualidade metodológica e a validade interna do ensaio clínico',
+          'A taxa de citação dos autores na comunidade científica'
+        ],
+        answer: 2,
+        explanation: 'A Escala PEDro possui 11 critérios (10 pontuáveis) formulados para mensurar a validade interna e a clareza estatística de ensaios clínicos controlados.'
+      }
+    ];
+
+    let currentQIdx = 0;
+    let quizScore = 0;
+    let answeredCurrent = false;
+
+    const modalQuiz = document.getElementById('modalQuiz');
+    const quizBody = document.getElementById('quizBody');
+    const quizProgressText = document.getElementById('quizProgressText');
+
+    function openQuizModal() {
+      currentQIdx = 0;
+      quizScore = 0;
+      answeredCurrent = false;
+      modalQuiz?.showModal();
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      if (currentQIdx >= quizQuestions.length) {
+        renderQuizResults();
+        return;
+      }
+
+      answeredCurrent = false;
+      const q = quizQuestions[currentQIdx];
+      quizProgressText.textContent = `Questão ${currentQIdx + 1} de ${quizQuestions.length}`;
+
+      let html = `
+        <div class="stack gap-3">
+          <span class="badge" data-variant="secondary">Questão ${currentQIdx + 1} de 6</span>
+          <h4 class="text-base font-bold m-0" style="color: var(--text);">${q.question}</h4>
+          <div class="stack gap-2 mt-2" id="quizOptionsList">
+      `;
+
+      q.options.forEach((opt, idx) => {
+        html += `
+          <button class="btn" data-variant="outline" style="justify-content: flex-start; text-align: left; height: auto; padding: 12px 14px; white-space: normal;" onclick="selectQuizAnswer(${idx})">
+            <span class="font-bold mr-2" style="color: var(--accent);">${String.fromCharCode(65 + idx)})</span> ${opt}
+          </button>
+        `;
+      });
+
+      html += `
+          </div>
+          <div id="quizFeedbackArea" class="mt-2" style="display: none;"></div>
+        </div>
+      `;
+
+      quizBody.innerHTML = html;
+    }
+
+    window.selectQuizAnswer = function(chosenIdx) {
+      if (answeredCurrent) return;
+      answeredCurrent = true;
+
+      const q = quizQuestions[currentQIdx];
+      const isCorrect = (chosenIdx === q.answer);
+      if (isCorrect) quizScore++;
+
+      const optionsList = document.getElementById('quizOptionsList');
+      const buttons = optionsList ? optionsList.querySelectorAll('button') : [];
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.answer) {
+          btn.style.background = '#dcfce7';
+          btn.style.borderColor = '#16a34a';
+          btn.style.color = '#14532d';
+          btn.innerHTML += ' <span style="margin-left:auto; font-weight:bold;">✓ Correta</span>';
+        } else if (idx === chosenIdx) {
+          btn.style.background = '#fee2e2';
+          btn.style.borderColor = '#dc2626';
+          btn.style.color = '#7f1d1d';
+          btn.innerHTML += ' <span style="margin-left:auto; font-weight:bold;">✕ Incorreta</span>';
+        }
+      });
+
+      const feedbackArea = document.getElementById('quizFeedbackArea');
+      if (feedbackArea) {
+        feedbackArea.style.display = 'block';
+        feedbackArea.innerHTML = `
+          <div class="panel p-3" style="background: ${isCorrect ? '#f0fdf4' : '#fff7ed'}; border-left: 4px solid ${isCorrect ? '#16a34a' : '#ea580c'};">
+            <p class="font-bold text-sm m-0" style="color: ${isCorrect ? '#166534' : '#9a3412'};">
+              ${isCorrect ? 'Parabéns, resposta correta!' : 'Atenção à lógica:'}
+            </p>
+            <p class="text-xs muted m-0 mt-1">${q.explanation}</p>
+            <div class="mt-3 text-right">
+              <button class="btn" data-variant="primary" data-size="sm" onclick="nextQuizQuestion()">
+                ${currentQIdx === quizQuestions.length - 1 ? 'Ver Resultado Final' : 'Próxima Questão →'}
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    };
+
+    window.nextQuizQuestion = function() {
+      currentQIdx++;
+      renderQuizQuestion();
+    };
+
+    function renderQuizResults() {
+      userProgress.completedQuiz = true;
+      updateProgressBar();
+
+      quizProgressText.textContent = 'Quiz Concluído!';
+      const pct = Math.round((quizScore / quizQuestions.length) * 100);
+
+      let msg = '';
+      let badgeColor = 'var(--accent)';
+      if (quizScore >= 5) {
+        msg = 'Excelente aproveitamento! Você domina os conceitos fundamentais de busca sistemática em fisioterapia.';
+        badgeColor = '#16a34a';
+      } else if (quizScore >= 3) {
+        msg = 'Bom desempenho! Vale a pena revisar os tópicos de sintaxe e as especificidades da PEDro e Cochrane.';
+        badgeColor = '#d97706';
+      } else {
+        msg = 'Recomendamos que releia com calma a aba de Conceituação e assista aos vídeos curtos do GETS UFC.';
+        badgeColor = '#dc2626';
+      }
+
+      quizBody.innerHTML = `
+        <div class="stack gap-3 text-center p-3">
+          <div style="font-size: 3rem;">${quizScore >= 4 ? '🎉' : '📚'}</div>
+          <h4 class="text-xl font-bold m-0">Resultado do Exercício</h4>
+          <div class="panel p-4" style="background: #f8fafc; border: 1px solid var(--border);">
+            <span class="text-3xl font-bold" style="color: ${badgeColor};">${quizScore} / ${quizQuestions.length}</span>
+            <p class="text-sm muted m-0 mt-1">${pct}% de acertos</p>
+          </div>
+          <p class="text-sm" style="line-height: 1.6;">${msg}</p>
+          <div class="row gap-2" style="justify-content: center; margin-top: 12px;">
+            <button class="btn" data-variant="primary" onclick="openQuizModal()">Refazer Exercício</button>
+            <button class="btn" data-variant="outline" data-dialog-close>Concluir</button>
+          </div>
+        </div>
+      `;
+    }
+
+    /* =========================================================
+       REFERÊNCIAS RETRÁTEIS E COPIAR CITAÇÃO
+    ========================================================= */
+    const btnToggleRef = document.getElementById('btnToggleRef');
+    const refAccordionContent = document.getElementById('refAccordionContent');
+    const btnExpandAllRef = document.getElementById('btnExpandAllRef');
+    const btnCopyCitation = document.getElementById('btnCopyCitation');
+    const citationContentText = document.getElementById('citationContentText');
+
+    function setRefAccordionOpen(isOpen) {
+      if (!btnToggleRef || !refAccordionContent) return;
+      btnToggleRef.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (isOpen) {
+        refAccordionContent.classList.add('is-open');
+        if (btnExpandAllRef) btnExpandAllRef.textContent = 'Recolher';
+      } else {
+        refAccordionContent.classList.remove('is-open');
+        if (btnExpandAllRef) btnExpandAllRef.textContent = 'Expandir todas';
+      }
+    }
+
+    btnToggleRef?.addEventListener('click', () => {
+      const isCurrentlyOpen = btnToggleRef.getAttribute('aria-expanded') === 'true';
+      setRefAccordionOpen(!isCurrentlyOpen);
+    });
+
+    btnExpandAllRef?.addEventListener('click', () => {
+      const isCurrentlyOpen = btnToggleRef?.getAttribute('aria-expanded') === 'true';
+      setRefAccordionOpen(!isCurrentlyOpen);
+    });
+
+    btnCopyCitation?.addEventListener('click', () => {
+      const text = citationContentText?.textContent || '';
+      navigator.clipboard?.writeText(text).then(() => {
+        if (window.skipUI?.toast) {
+          window.skipUI.toast('Citação copiada com sucesso!', { type: 'success' });
+        }
+      });
+    });
+
+    /* =========================================================
+       SISTEMA ROBUSTO DE TOOLTIPS VIA PORTAL NO BODY
+       - Elimina 100% de clipping (nenhum overflow ancestral recorta)
+       - Clamp horizontal (12px min de margem nas bordas da janela)
+       - Clamp vertical (12px abaixo do header sticky e dentro da viewport)
+       - Modo responsivo mobile (<= 480px) em card centralizado inferior
+       - Suporte completo a Desktop (hover + foco) e Toque (touch/outside)
+       - Acessibilidade: role="tooltip", aria-describedby e ESC
+    ========================================================= */
+    const TooltipManager = {
+      portalEl: null,
+      arrowEl: null,
+      contentEl: null,
+      activeTrigger: null,
+      hideTimeout: null,
+      isTouchInteraction: false,
+      isOpen: false,
+
+      init() {
+        // Criar portal flutuante diretamente no <body>
+        this.portalEl = document.createElement('div');
+        this.portalEl.id = 'globalTooltipPortal';
+        this.portalEl.className = 'portal-tooltip';
+        this.portalEl.setAttribute('role', 'tooltip');
+        this.portalEl.setAttribute('aria-hidden', 'true');
+
+        this.arrowEl = document.createElement('div');
+        this.arrowEl.className = 'portal-tooltip-arrow';
+
+        this.contentEl = document.createElement('div');
+        this.contentEl.className = 'portal-tooltip-content';
+        this.contentEl.setAttribute('tabindex', '0');
+
+        this.portalEl.appendChild(this.arrowEl);
+        this.portalEl.appendChild(this.contentEl);
+        document.body.appendChild(this.portalEl);
+
+        // Hover cortês no balão para permitir leitura/rolagem
+        this.portalEl.addEventListener('mouseenter', () => this.cancelHide());
+        this.portalEl.addEventListener('mouseleave', () => {
+          if (!this.isTouchInteraction) this.scheduleHide();
+        });
+
+        // Fechar com toque no próprio balão
+        this.portalEl.addEventListener('click', (e) => {
+          // Permite clique em links internos se houver, senão fecha
+          if (e.target.tagName !== 'A') {
+            this.hide();
+          }
+        });
+
+        // Registrar todos os gatilhos existentes na página
+        const triggers = document.querySelectorAll('.term-tip');
+        triggers.forEach((trigger, idx) => {
+          this.bindTrigger(trigger, idx);
+        });
+
+        // Eventos globais de reposicionamento e fechamento
+        window.addEventListener('scroll', () => this.onViewportChange(), { passive: true });
+        window.addEventListener('resize', () => this.onViewportChange(), { passive: true });
+        window.addEventListener('orientationchange', () => this.onViewportChange(), { passive: true });
+
+        // Fechar ao teclar Escape
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.isOpen) {
+            const lastTrigger = this.activeTrigger;
+            this.hide();
+            if (lastTrigger) lastTrigger.focus();
+          }
+        });
+
+        // Fechar ao clicar ou tocar fora
+        document.addEventListener('pointerdown', (e) => {
+          if (!this.isOpen) return;
+          if (this.portalEl.contains(e.target)) return;
+          if (this.activeTrigger && this.activeTrigger.contains(e.target)) return;
+          this.hide();
+        });
+      },
+
+      bindTrigger(trigger, idx) {
+        // Extrair texto ou HTML da tag .tip-box interna ou do data-tip
+        let tipHtml = '';
+        const innerBox = trigger.querySelector('.tip-box');
+        if (innerBox) {
+          tipHtml = innerBox.innerHTML.trim();
+        } else if (trigger.getAttribute('data-tip')) {
+          tipHtml = trigger.getAttribute('data-tip').trim();
+        }
+
+        if (!tipHtml) return;
+
+        trigger.dataset.tipContent = tipHtml;
+        if (!trigger.hasAttribute('tabindex')) {
+          trigger.setAttribute('tabindex', '0');
+        }
+        trigger.setAttribute('role', 'button');
+        trigger.setAttribute('aria-haspopup', 'true');
+        if (!trigger.id) {
+          trigger.id = 'term-tip-trigger-' + idx;
+        }
+
+        // Eventos Desktop: Hover
+        trigger.addEventListener('mouseenter', () => {
+          this.cancelHide();
+          this.isTouchInteraction = false;
+          this.show(trigger);
+        });
+        trigger.addEventListener('mouseleave', () => {
+          if (!this.isTouchInteraction) {
+            this.scheduleHide();
+          }
+        });
+
+        // Eventos Desktop: Teclado (Foco)
+        trigger.addEventListener('focus', () => {
+          this.cancelHide();
+          this.isTouchInteraction = false;
+          this.show(trigger);
+        });
+        trigger.addEventListener('blur', () => {
+          if (!this.isTouchInteraction) {
+            this.scheduleHide();
+          }
+        });
+
+        // Eventos Toque / Mobile: Alternar no toque
+        trigger.addEventListener('pointerdown', (e) => {
+          if (e.pointerType === 'touch') {
+            this.isTouchInteraction = true;
+          }
+        });
+
+        trigger.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (this.isOpen && this.activeTrigger === trigger) {
+            this.hide();
+          } else {
+            this.isTouchInteraction = true;
+            this.show(trigger);
+          }
+        });
+      },
+
+      cancelHide() {
+        if (this.hideTimeout) {
+          clearTimeout(this.hideTimeout);
+          this.hideTimeout = null;
+        }
+      },
+
+      scheduleHide() {
+        this.cancelHide();
+        this.hideTimeout = setTimeout(() => {
+          this.hide();
+        }, 180); // Atraso de cortesia
+      },
+
+      show(trigger) {
+        this.cancelHide();
+        const content = trigger.dataset.tipContent;
+        if (!content) return;
+
+        this.activeTrigger = trigger;
+        this.contentEl.innerHTML = content;
+        this.contentEl.scrollTop = 0;
+
+        trigger.setAttribute('aria-describedby', 'globalTooltipPortal');
+        this.portalEl.setAttribute('aria-hidden', 'false');
+
+        // Renderiza e posiciona imediatamente
+        this.updatePosition();
+        this.portalEl.classList.add('is-active');
+        this.isOpen = true;
+      },
+
+      hide() {
+        this.cancelHide();
+        if (!this.isOpen && !this.activeTrigger) return;
+        this.portalEl.classList.remove('is-active');
+        this.portalEl.setAttribute('aria-hidden', 'true');
+        if (this.activeTrigger) {
+          this.activeTrigger.removeAttribute('aria-describedby');
+        }
+        this.activeTrigger = null;
+        this.isOpen = false;
+        this.isTouchInteraction = false;
+      },
+
+      onViewportChange() {
+        if (!this.isOpen || !this.activeTrigger) return;
+        window.requestAnimationFrame(() => {
+          this.updatePosition();
+        });
+      },
+
+      updatePosition() {
+        if (!this.activeTrigger || !this.portalEl) return;
+
+        const triggerRect = this.activeTrigger.getBoundingClientRect();
+        const winW = window.innerWidth;
+        const winH = window.innerHeight;
+
+        // Se o gatilho rolou para fora completa da tela, oculta temporariamente
+        if (triggerRect.bottom < 0 || triggerRect.top > winH) {
+          this.portalEl.style.opacity = '0';
+          return;
+        } else {
+          this.portalEl.style.opacity = '1';
+        }
+
+        // Medir altura da faixa compacta para nunca cobrir o cabeçalho quando visível
+        const compactNavEl = document.getElementById('compactNav');
+        const isNavVisible = compactNavEl && compactNavEl.classList.contains('is-visible');
+        const headerBottom = isNavVisible ? Math.max(0, compactNavEl.getBoundingClientRect().bottom) : 0;
+
+        const MIN_MARGIN = 12; // Margem de respiro das bordas da tela
+        const SAFE_HEADER_GAP = Math.max(headerBottom + 10, MIN_MARGIN);
+
+        // Medir tamanho real do balão renderizado
+        // Usamos dimensões sem transform para medição precisa
+        this.portalEl.style.transform = 'none';
+        const tipRect = this.portalEl.getBoundingClientRect();
+        const tipW = tipRect.width;
+        const tipH = tipRect.height;
+
+        // MODO ESPECIAL PARA DISPOSITIVOS ESTREITOS (<= 480px)
+        const isNarrowScreen = winW <= 480;
+        const isLongText = (triggerRect.top < SAFE_HEADER_GAP + tipH && (winH - triggerRect.bottom) < tipH + 20) || (isNarrowScreen && tipH > 110);
+
+        if (isNarrowScreen && isLongText) {
+          this.portalEl.setAttribute('data-side', 'bottom-sheet');
+          this.portalEl.style.position = 'fixed';
+          this.portalEl.style.left = '12px';
+          this.portalEl.style.top = 'auto';
+          this.portalEl.style.bottom = '20px';
+          this.portalEl.style.width = 'calc(100vw - 24px)';
+          this.arrowEl.style.display = 'none';
+          return;
+        }
+
+        this.arrowEl.style.display = 'block';
+
+        // 1. Decidir preferência vertical:
+        // Espaço acima disponível (entre o header fixo e o topo do gatilho)
+        const spaceAbove = triggerRect.top - SAFE_HEADER_GAP;
+        // Espaço abaixo disponível (entre a base do gatilho e a borda inferior da tela)
+        const spaceBelow = (winH - MIN_MARGIN) - triggerRect.bottom;
+
+        let placement = 'top';
+        const gap = 8; // distância entre balão e gatilho
+
+        if (spaceAbove >= tipH + gap) {
+          placement = 'top';
+        } else if (spaceBelow >= tipH + gap) {
+          placement = 'bottom';
+        } else {
+          // Se nenhum dos lados couber idealmente, escolhe o que tem mais espaço
+          placement = spaceAbove >= spaceBelow ? 'top' : 'bottom';
+        }
+
+        this.portalEl.setAttribute('data-side', placement);
+
+        // 2. Calcular Top com Clamp vertical
+        let top = 0;
+        if (placement === 'top') {
+          top = triggerRect.top - tipH - gap;
+          if (top < SAFE_HEADER_GAP) {
+            top = SAFE_HEADER_GAP;
+          }
+        } else {
+          top = triggerRect.bottom + gap;
+          if (top + tipH > winH - MIN_MARGIN) {
+            top = Math.max(SAFE_HEADER_GAP, winH - MIN_MARGIN - tipH);
+          }
+        }
+
+        // 3. Calcular Left com Clamp horizontal
+        const triggerCenter = triggerRect.left + (triggerRect.width / 2);
+        let left = triggerCenter - (tipW / 2);
+
+        // Clamp nas bordas esquerda e direita
+        if (left < MIN_MARGIN) {
+          left = MIN_MARGIN;
+        } else if (left + tipW > winW - MIN_MARGIN) {
+          left = winW - MIN_MARGIN - tipW;
+        }
+
+        // 4. Posicionar o balão no viewport
+        this.portalEl.style.position = 'fixed';
+        this.portalEl.style.left = Math.round(left) + 'px';
+        this.portalEl.style.top = Math.round(top) + 'px';
+        this.portalEl.style.bottom = 'auto';
+        this.portalEl.style.width = 'min(320px, calc(100vw - 24px))';
+
+        // 5. Posicionar a seta exatamente sobre o centro do gatilho
+        let arrowOffset = triggerCenter - left;
+        // Garante que a seta nunca ultrapasse o raio arredondado do balão
+        arrowOffset = Math.max(14, Math.min(tipW - 14, arrowOffset));
+        this.arrowEl.style.left = Math.round(arrowOffset) + 'px';
+      }
+    };
+
+    // Inicialização ao carregar o DOM
+    document.addEventListener('DOMContentLoaded', () => {
+      updateProgressBar();
+      updatePico();
+      setBooleanOp('AND');
+      TooltipManager.init();
+      initCompactNav();
+    });
+  </script>
+</body>
+</html>
